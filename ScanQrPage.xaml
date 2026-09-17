@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:TabletTracker.Controls"
+             xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
              x:Class="TabletTracker.Pages.ScanQrPage"
              Title="Skanuj kod QR"
              BackgroundColor="{StaticResource AppBackground}">
@@ -16,36 +17,92 @@
                    FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}"
                    HorizontalOptions="Center" Margin="0,40,0,0" />
 
-            <!-- Podgląd kamery / obszar skanowania.
-                 W realnej implementacji podłącz tu np. CameraView z ZXing.Net.Maui
-                 (pakiet: ZXing.Net.MAUI) i nasłuchuj zdarzenia OnDetected. -->
-            <Border Grid.Row="1" BackgroundColor="#10161F" WidthRequest="360" HeightRequest="360"
-                    StrokeThickness="0" VerticalOptions="Center" HorizontalOptions="Center">
-                <Grid>
-                    <Ellipse Stroke="{StaticResource Accent}" StrokeThickness="1" Opacity="0.45"
-                             WidthRequest="119" HeightRequest="119"
-                             HorizontalOptions="Center" VerticalOptions="Center" />
+            <!-- Obszar skanowania / wynik -->
+            <Grid Grid.Row="1" Padding="34,30,34,20">
 
-                    <!-- Narożniki ramki skanera -->
-                    <BoxView Color="{StaticResource Accent}" WidthRequest="34" HeightRequest="2"
-                             HorizontalOptions="Start" VerticalOptions="Start" Margin="16" />
-                    <BoxView Color="{StaticResource Accent}" WidthRequest="2" HeightRequest="34"
-                             HorizontalOptions="Start" VerticalOptions="Start" Margin="16" />
+                <!-- Podgląd kamery z ramką skanera -->
+                <Grid x:Name="ScannerArea"
+                      VerticalOptions="Center" HorizontalOptions="Center"
+                      WidthRequest="360" HeightRequest="360">
 
-                    <BoxView Color="{StaticResource Accent}" WidthRequest="34" HeightRequest="2"
-                             HorizontalOptions="End" VerticalOptions="Start" Margin="16" />
-                    <BoxView Color="{StaticResource Accent}" WidthRequest="2" HeightRequest="34"
-                             HorizontalOptions="End" VerticalOptions="Start" Margin="16" />
+                    <zxing:CameraBarcodeReaderView
+                        x:Name="CameraBarcodeReader"
+                        BarcodesDetected="OnBarcodesDetected" 
+                        IsTorchOn="True"
+                        IsDetecting="True"/>
 
-                    <VerticalStackLayout VerticalOptions="End" HorizontalOptions="Center" Margin="0,0,0,24" Spacing="4">
-                        <Label Text="Urządzenie zostanie rozpoznane automatycznie na"
-                               FontSize="12.5" TextColor="#8CF3F4EF" HorizontalTextAlignment="Center" />
-                        <Label Text="podstawie kodu przypisanego do tabletu"
-                               FontSize="12.5" TextColor="#8CF3F4EF" HorizontalTextAlignment="Center" />
+                    <!-- Ramka i podpisy (nakładka, ignoruje dotyk) -->
+                    <Grid InputTransparent="True" Opacity="0.5">
+                        <Ellipse Stroke="{StaticResource Accent}" StrokeThickness="1" Opacity="0.45"
+                                 WidthRequest="119" HeightRequest="119"
+                                 HorizontalOptions="Center" VerticalOptions="Center" />
+
+                        <BoxView Color="{StaticResource Accent}" WidthRequest="34" HeightRequest="2"
+                                 HorizontalOptions="Start" VerticalOptions="Start" Margin="16" />
+                        <BoxView Color="{StaticResource Accent}" WidthRequest="2" HeightRequest="34"
+                                 HorizontalOptions="Start" VerticalOptions="Start" Margin="16" />
+
+                        <BoxView Color="{StaticResource Accent}" WidthRequest="34" HeightRequest="2"
+                                 HorizontalOptions="End" VerticalOptions="Start" Margin="16" />
+                        <BoxView Color="{StaticResource Accent}" WidthRequest="2" HeightRequest="34"
+                                 HorizontalOptions="End" VerticalOptions="Start" Margin="16" />
+
+                        <BoxView Color="{StaticResource Accent}" WidthRequest="34" HeightRequest="2"
+                                 HorizontalOptions="Start" VerticalOptions="End" Margin="16" />
+                        <BoxView Color="{StaticResource Accent}" WidthRequest="2" HeightRequest="34"
+                                 HorizontalOptions="Start" VerticalOptions="End" Margin="16" />
+
+                        <BoxView Color="{StaticResource Accent}" WidthRequest="34" HeightRequest="2"
+                                 HorizontalOptions="End" VerticalOptions="End" Margin="16" />
+                        <BoxView Color="{StaticResource Accent}" WidthRequest="2" HeightRequest="34"
+                                 HorizontalOptions="End" VerticalOptions="End" Margin="16" />
+
+                        <VerticalStackLayout VerticalOptions="End" HorizontalOptions="Center" Margin="0,0,0,24" Spacing="4">
+                            <Label Text="Urządzenie zostanie rozpoznane automatycznie na"
+                                   FontSize="12.5" TextColor="#8CF3F4EF" HorizontalTextAlignment="Center" />
+                            <Label Text="podstawie kodu przypisanego do tabletu"
+                                   FontSize="12.5" TextColor="#8CF3F4EF" HorizontalTextAlignment="Center" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!-- Fallback: brak kamery / brak uprawnień -->
+                    <VerticalStackLayout x:Name="UnsupportedPanel" IsVisible="False"
+                                         BackgroundColor="#10161F" Padding="24" Spacing="8"
+                                         VerticalOptions="Center" HorizontalOptions="Center">
+                        <Label Text="Skanowanie niedostępne"
+                               FontSize="15" FontAttributes="Bold" TextColor="#F3F4EF"
+                               HorizontalTextAlignment="Center" />
+                        <Label x:Name="UnsupportedMessageLabel"
+                               FontSize="12.5" TextColor="#8CF3F4EF"
+                               HorizontalTextAlignment="Center" />
                     </VerticalStackLayout>
                 </Grid>
-            </Border>
 
+                <!-- Wynik skanu -->
+                <Border x:Name="ResultPanel" IsVisible="False"
+                        VerticalOptions="Center" HorizontalOptions="Center"
+                        BackgroundColor="{StaticResource CardMuted}"
+                        Stroke="{StaticResource BorderHairline}" StrokeThickness="1"
+                        Padding="19,15">
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto"
+                          ColumnSpacing="16" RowSpacing="12">
+                        <Border Grid.Row="0" Grid.Column="0" VerticalOptions="Center"
+                                BackgroundColor="{StaticResource SidebarBackground}"
+                                Padding="10,5" StrokeThickness="0">
+                            <Label x:Name="StationCodeLabel" Text="TABLET —"
+                                   FontSize="13.5" FontAttributes="Bold"
+                                   TextColor="{StaticResource TextOnDark}" />
+                        </Border>
+                        <Label Grid.Row="0" Grid.Column="1" Text="Kod odczytany poprawnie"
+                               FontSize="13.5" TextColor="{StaticResource TextPrimary}"
+                               VerticalOptions="Center" />
+                        <Button Grid.Row="1" Grid.Column="1" Text="Skanuj ponownie"
+                                Clicked="OnRescanClicked" Style="{StaticResource OutlineButton}"
+                                HorizontalOptions="End" HeightRequest="36" FontSize="12.5" />
+                    </Grid>
+                </Border>
+
+            </Grid>
         </Grid>
     </Grid>
 </ContentPage>

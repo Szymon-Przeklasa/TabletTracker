@@ -36,7 +36,7 @@
                         </Border.GestureRecognizers>
                         <VerticalStackLayout VerticalOptions="End" Spacing="6">
                             <Label Text="Skanuj kod QR" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
-                            <Label Text="Rozpoznaj stanowisko i przypisz ucznia" FontSize="12.5" TextColor="{StaticResource TextPrimary}" Opacity="0.7" />
+                            <Label Text="Rozpoznaj stanowisko i przypisz ucznia" FontSize="12" TextColor="{StaticResource TextPrimary}" Opacity="0.7" />
                         </VerticalStackLayout>
                     </Border>
 
@@ -47,7 +47,7 @@
                         </Border.GestureRecognizers>
                         <VerticalStackLayout VerticalOptions="End" Spacing="6">
                             <Label Text="Zarządzaj klasami" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
-                            <Label Text="Podgląd i edycja uczniów w bazie" FontSize="12.5" TextColor="{StaticResource TextPrimary}" Opacity="0.65" />
+                            <Label Text="Podgląd i edycja uczniów w bazie" FontSize="12" TextColor="{StaticResource TextPrimary}" Opacity="0.65" />
                         </VerticalStackLayout>
                     </Border>
 
@@ -58,7 +58,7 @@
                         </Border.GestureRecognizers>
                         <VerticalStackLayout VerticalOptions="End" Spacing="6">
                             <Label Text="Historia skanów" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
-                            <Label Text="Wszystkie skany z tej i poprzednich sal" FontSize="12.5" TextColor="{StaticResource TextPrimary}" Opacity="0.65" />
+                            <Label Text="Wszystkie skany z tej i poprzednich sal" FontSize="12" TextColor="{StaticResource TextPrimary}" Opacity="0.65" />
                         </VerticalStackLayout>
                     </Border>
                 </Grid>
@@ -87,7 +87,7 @@
                                     <Label Grid.Column="0" Text="{Binding Time}" FontSize="13" TextColor="#99727F8C" VerticalOptions="Center" Margin="0,8,0,0" />
                                     <Ellipse Grid.Column="1" Fill="{StaticResource SuccessBorder}" WidthRequest="8" HeightRequest="8"
                                              VerticalOptions="Center" Margin="0,8,0,0" />
-                                    <Label Grid.Column="2" Text="{Binding Station}" FontSize="11.9" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" Margin="0,8,0,0" />
+                                    <Label Grid.Column="2" Text="{Binding Station}" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" Margin="0,8,0,0" />
                                     <Label Grid.Column="3" Text="{Binding StudentAndClass}" FontSize="13" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" Margin="0,8,0,0" />
                                 </Grid>
                             </DataTemplate>
