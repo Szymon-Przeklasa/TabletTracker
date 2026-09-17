@@ -2,6 +2,7 @@
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:TabletTracker"
+             xmlns:conv="clr-namespace:TabletTracker.Converters"
              x:Class="TabletTracker.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -9,6 +10,12 @@
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <conv:StationBgConverter x:Key="StationBgConverter" />
+            <conv:StationBorderConverter x:Key="StationBorderConverter" />
+            <conv:StationDotConverter x:Key="StationDotConverter" />
+            <conv:StationFontConverter x:Key="StationFontConverter" />
+            <conv:AvatarBgConverter x:Key="AvatarBgConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

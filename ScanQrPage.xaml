@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:TabletTracker.Controls"
+             x:Class="TabletTracker.Pages.ScanQrPage"
+             Title="Skanuj kod QR"
+             BackgroundColor="{StaticResource AppBackground}">
+
+    <Grid ColumnDefinitions="224,*">
+
+        <controls:SidebarView Grid.Column="0" ActiveRoute="Scan" />
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,*">
+
+            <Label Grid.Row="0" Text="Zeskanuj kod QR na tablecie"
+                   FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}"
+                   HorizontalOptions="Center" Margin="0,40,0,0" />
+
+            <!-- Podgląd kamery / obszar skanowania.
+                 W realnej implementacji podłącz tu np. CameraView z ZXing.Net.Maui
+                 (pakiet: ZXing.Net.MAUI) i nasłuchuj zdarzenia OnDetected. -->
+            <Border Grid.Row="1" BackgroundColor="#10161F" WidthRequest="360" HeightRequest="360"
+                    StrokeThickness="0" VerticalOptions="Center" HorizontalOptions="Center">
+                <Grid>
+                    <Ellipse Stroke="{StaticResource Accent}" StrokeThickness="1" Opacity="0.45"
+                             WidthRequest="119" HeightRequest="119"
+                             HorizontalOptions="Center" VerticalOptions="Center" />
+
+                    <!-- Narożniki ramki skanera -->
+                    <BoxView Color="{StaticResource Accent}" WidthRequest="34" HeightRequest="2"
+                             HorizontalOptions="Start" VerticalOptions="Start" Margin="16" />
+                    <BoxView Color="{StaticResource Accent}" WidthRequest="2" HeightRequest="34"
+                             HorizontalOptions="Start" VerticalOptions="Start" Margin="16" />
+
+                    <BoxView Color="{StaticResource Accent}" WidthRequest="34" HeightRequest="2"
+                             HorizontalOptions="End" VerticalOptions="Start" Margin="16" />
+                    <BoxView Color="{StaticResource Accent}" WidthRequest="2" HeightRequest="34"
+                             HorizontalOptions="End" VerticalOptions="Start" Margin="16" />
+
+                    <VerticalStackLayout VerticalOptions="End" HorizontalOptions="Center" Margin="0,0,0,24" Spacing="4">
+                        <Label Text="Urządzenie zostanie rozpoznane automatycznie na"
+                               FontSize="12.5" TextColor="#8CF3F4EF" HorizontalTextAlignment="Center" />
+                        <Label Text="podstawie kodu przypisanego do tabletu"
+                               FontSize="12.5" TextColor="#8CF3F4EF" HorizontalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+        </Grid>
+    </Grid>
+</ContentPage>

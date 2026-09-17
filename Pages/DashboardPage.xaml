@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:TabletTracker.Controls"
+             x:Class="TabletTracker.Pages.DashboardPage"
+             Title="Menu główne"
+             BackgroundColor="{StaticResource AppBackground}">
+
+    <Grid ColumnDefinitions="224,*">
+
+        <controls:SidebarView Grid.Column="0" ActiveRoute="Dashboard" />
+
+        <ScrollView Grid.Column="1">
+            <VerticalStackLayout Padding="34,30" Spacing="24">
+
+                <!-- Nagłówek -->
+                <Grid ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Grid.Column="0" Spacing="4">
+                        <Label Text="Sala komputerowa P1" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                        <Label Text="Liczba stanowisk: 17" FontSize="14" TextColor="#99727F8C" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="1" Spacing="4" HorizontalOptions="End">
+                        <Label Text="Środa" FontSize="13" FontAttributes="Bold" HorizontalTextAlignment="End" TextColor="{StaticResource TextPrimary}" />
+                        <Label Text="14 września 2026" FontSize="12" TextColor="#99727F8C" />
+                        <Label Text="10:24" FontSize="12" HorizontalTextAlignment="End" TextColor="#99727F8C" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <!-- Kafle akcji -->
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="18">
+
+                    <Border Grid.Column="0" Stroke="{StaticResource BorderStrong}" StrokeThickness="1"
+                            BackgroundColor="{StaticResource Accent}" HeightRequest="150" Padding="22">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnScanTileTapped" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout VerticalOptions="End" Spacing="6">
+                            <Label Text="Skanuj kod QR" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Rozpoznaj stanowisko i przypisz ucznia" FontSize="12.5" TextColor="{StaticResource TextPrimary}" Opacity="0.7" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="1" Stroke="{StaticResource BorderStrong}" StrokeThickness="1"
+                            BackgroundColor="Transparent" HeightRequest="150" Padding="22">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnClassesTileTapped" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout VerticalOptions="End" Spacing="6">
+                            <Label Text="Zarządzaj klasami" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Podgląd i edycja uczniów w bazie" FontSize="12.5" TextColor="{StaticResource TextPrimary}" Opacity="0.65" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="2" Stroke="{StaticResource BorderStrong}" StrokeThickness="1"
+                            BackgroundColor="Transparent" HeightRequest="150" Padding="22">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnHistoryTileTapped" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout VerticalOptions="End" Spacing="6">
+                            <Label Text="Historia skanów" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                            <Label Text="Wszystkie skany z tej i poprzednich sal" FontSize="12.5" TextColor="{StaticResource TextPrimary}" Opacity="0.65" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Pasek postępu -->
+                <Border BackgroundColor="{StaticResource CardMuted}" Stroke="{StaticResource BorderHairline}" StrokeThickness="1" Padding="21,17">
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="16" VerticalOptions="Center">
+                        <Label Grid.Column="0" Text="13 / 17" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
+                        <ProgressBar Grid.Column="1" Progress="0.76" ProgressColor="{StaticResource Accent}"
+                                     BackgroundColor="{StaticResource BorderSoft}" VerticalOptions="Center" HeightRequest="8" />
+                        <Label Grid.Column="2" Text="stanowisk przypisanych dziś" FontSize="13" TextColor="#99727F8C" VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <!-- Ostatnie skany -->
+                <VerticalStackLayout Spacing="0">
+                    <Label Text="OSTATNIE SKANY" Style="{StaticResource SectionLabel}" Margin="0,0,0,8" />
+
+                    <CollectionView ItemsSource="{Binding RecentScans}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="0,10" ColumnDefinitions="60,16,70,*"
+                                      ColumnSpacing="8">
+                                    <BoxView HeightRequest="1" Color="{StaticResource BorderHairline}"
+                                             VerticalOptions="Start" Grid.ColumnSpan="4" />
+                                    <Label Grid.Column="0" Text="{Binding Time}" FontSize="13" TextColor="#99727F8C" VerticalOptions="Center" Margin="0,8,0,0" />
+                                    <Ellipse Grid.Column="1" Fill="{StaticResource SuccessBorder}" WidthRequest="8" HeightRequest="8"
+                                             VerticalOptions="Center" Margin="0,8,0,0" />
+                                    <Label Grid.Column="2" Text="{Binding Station}" FontSize="11.9" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" Margin="0,8,0,0" />
+                                    <Label Grid.Column="3" Text="{Binding StudentAndClass}" FontSize="13" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" Margin="0,8,0,0" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

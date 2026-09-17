@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TabletTracker.Controls.SidebarView"
+             x:Name="Root">
+
+    <Grid WidthRequest="224"
+          BackgroundColor="{StaticResource SidebarBackground}">
+
+        <Label Text="Nazwa aplikacji"
+               TextColor="White"
+               FontSize="20"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               HorizontalTextAlignment="Center"
+               Margin="18,24,18,0"
+               VerticalOptions="Start" />
+
+        <VerticalStackLayout Margin="18,90,18,0"
+                              Spacing="5"
+                              VerticalOptions="Start">
+
+            <!-- Każdy element to Border klikalny (TapGestureRecognizer) -->
+            <Border x:Name="MenuGlowneItem" Style="{StaticResource SidebarItemFrame}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnMenuGlowneTapped" />
+                </Border.GestureRecognizers>
+                <Label x:Name="MenuGlowneLabel" Text="Menu główne" Style="{StaticResource SidebarItemLabel}" Margin="12,0,0,0" />
+            </Border>
+
+            <Border x:Name="SkanujItem" Style="{StaticResource SidebarItemFrame}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnSkanujTapped" />
+                </Border.GestureRecognizers>
+                <Label x:Name="SkanujLabel" Text="Skanuj kod QR" Style="{StaticResource SidebarItemLabel}" Margin="12,0,0,0" />
+            </Border>
+
+            <Border x:Name="KlasyItem" Style="{StaticResource SidebarItemFrame}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnKlasyTapped" />
+                </Border.GestureRecognizers>
+                <Label x:Name="KlasyLabel" Text="Zarządzaj klasami" Style="{StaticResource SidebarItemLabel}" Margin="12,0,0,0" />
+            </Border>
+
+            <Border x:Name="StanowiskaItem" Style="{StaticResource SidebarItemFrame}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnStanowiskaTapped" />
+                </Border.GestureRecognizers>
+                <Label x:Name="StanowiskaLabel" Text="Stanowiska" Style="{StaticResource SidebarItemLabel}" Margin="12,0,0,0" />
+            </Border>
+
+            <Border x:Name="HistoriaItem" Style="{StaticResource SidebarItemFrame}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnHistoriaTapped" />
+                </Border.GestureRecognizers>
+                <Label x:Name="HistoriaLabel" Text="Historia skanów" Style="{StaticResource SidebarItemLabel}" Margin="12,0,0,0" />
+            </Border>
+
+            <Border x:Name="UstawieniaItem" Style="{StaticResource SidebarItemFrame}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnUstawieniaTapped" />
+                </Border.GestureRecognizers>
+                <Label x:Name="UstawieniaLabel" Text="Ustawienia" Style="{StaticResource SidebarItemLabel}" Margin="12,0,0,0" />
+            </Border>
+
+        </VerticalStackLayout>
+    </Grid>
+</ContentView>

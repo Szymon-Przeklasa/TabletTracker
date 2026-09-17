@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:TabletTracker.Controls"
+             x:Class="TabletTracker.Pages.StationsPage"
+             Title="Stanowiska"
+             BackgroundColor="{StaticResource AppBackground}">
+
+    <Grid ColumnDefinitions="224,*">
+
+        <controls:SidebarView Grid.Column="0" ActiveRoute="Stations" />
+
+        <ScrollView Grid.Column="1">
+            <VerticalStackLayout Padding="34,30" Spacing="20">
+
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Stanowiska — Sala P1" Style="{StaticResource PageTitle}" />
+                    <Label Text="17 stanowisk" Style="{StaticResource PageSubtitle}" />
+                </VerticalStackLayout>
+
+                <!-- Pasek: aktywny tablet / status skanu -->
+                <Border BackgroundColor="{StaticResource CardMuted}" Stroke="{StaticResource BorderHairline}" StrokeThickness="1" Padding="19,15">
+                    <Grid ColumnDefinitions="Auto,Auto,*,Auto" ColumnSpacing="16" VerticalOptions="Center">
+                        <Border Grid.Column="0" BackgroundColor="{StaticResource SidebarBackground}" Padding="10,5" StrokeThickness="0">
+                            <Label Text="TABLET 67" FontSize="13.5" FontAttributes="Bold" TextColor="{StaticResource TextOnDark}" />
+                        </Border>
+                        <BoxView Grid.Column="1" WidthRequest="1" HeightRequest="18" Color="{StaticResource BorderSoft}" />
+                        <Label Grid.Column="2" Text="Kod odczytany poprawnie" FontSize="13.5" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
+                        <Label Grid.Column="3" Text="Skanuj ponownie" FontSize="13.5" TextColor="#99727F8C" VerticalOptions="Center" />
+                    </Grid>
+                </Border>
+
+                <!-- Filtry -->
+                <HorizontalStackLayout Spacing="10">
+                    <Button Text="Wszystkie" Style="{StaticResource OutlineButtonActive}" Padding="17,0" WidthRequest="94" />
+                    <Button Text="Przypisane" Style="{StaticResource OutlineButton}" Padding="17,0" WidthRequest="99" />
+                    <Button Text="Wolne" Style="{StaticResource OutlineButton}" Padding="17,0" WidthRequest="72" />
+                </HorizontalStackLayout>
+
+                <!-- Siatka stanowisk -->
+                <CollectionView ItemsSource="{Binding Stations}" HeightRequest="300">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="5" HorizontalItemSpacing="10" VerticalItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border StrokeThickness="1" Padding="12" HeightRequest="142"
+                                    BackgroundColor="{Binding IsAssigned, Converter={StaticResource StationBgConverter}}"
+                                    Stroke="{Binding IsAssigned, Converter={StaticResource StationBorderConverter}}">
+                                <Grid RowDefinitions="Auto,*">
+                                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                                        <Label Grid.Column="0" Text="{Binding Number}" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
+                                        <Ellipse Grid.Column="1" WidthRequest="8" HeightRequest="8" VerticalOptions="Center"
+                                                 Fill="{Binding IsAssigned, Converter={StaticResource StationDotConverter}}" />
+                                    </Grid>
+                                    <Label Grid.Row="1" Text="{Binding StudentName}" FontSize="12" VerticalOptions="End"
+                                           TextColor="{StaticResource TextPrimary}"
+                                           FontAttributes="{Binding IsAssigned, Converter={StaticResource StationFontConverter}}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
