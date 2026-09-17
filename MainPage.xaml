@@ -1,36 +1,254 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TabletTracker.MainPage">
+             x:Class="TabletTracker.MainPage"
+             BackgroundColor="#F3F4EF"
+             WidthRequest="1200"
+             HeightRequest="720">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
-            <Image
-                Source="dotnet_bot.png"
-                HeightRequest="185"
-                Aspect="AspectFit"
-                SemanticProperties.Description="dot net bot in a hovercraft number nine" />
+    <ContentPage.Resources>
+        <ResourceDictionary>
 
-            <Label
-                Text="Hello, World!"
-                Style="{StaticResource Headline}"
-                SemanticProperties.HeadingLevel="Level1" />
+            <Style x:Key="NavItemActive" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="#FF6A2B" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 8" />
+                <Setter Property="StrokeThickness" Value="0" />
+                <Setter Property="HeightRequest" Value="44" />
+                <Setter Property="Padding" Value="14,0" />
+            </Style>
 
-            <Label
-                Text="Welcome to &#10;.NET Multi-platform App UI"
-                Style="{StaticResource SubHeadline}"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
+            <Style x:Key="NavItem" TargetType="Border">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 8" />
+                <Setter Property="StrokeThickness" Value="0" />
+                <Setter Property="HeightRequest" Value="44" />
+                <Setter Property="Padding" Value="14,0" />
+            </Style>
 
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me" 
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Fill" />
+            <Style x:Key="ActionCard" TargetType="Border">
+                <Setter Property="WidthRequest" Value="289" />
+                <Setter Property="HeightRequest" Value="150" />
+                <Setter Property="Stroke" Value="#1B2430" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="StrokeShape" Value="Rectangle" />
+                <Setter Property="Padding" Value="22,24" />
+                <Setter Property="BackgroundColor" Value="#F3F4EF" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid ColumnDefinitions="224,*">
+
+        <!-- ===================== SIDEBAR ===================== -->
+        <VerticalStackLayout Grid.Column="0" BackgroundColor="#1B2430" Spacing="32">
+
+            <Label Text="TabletTracker"
+                   Margin="18,24,18,0"
+                   FontAttributes="Bold"
+                   FontSize="20"
+                   FontFamily="IBMPlexSans"
+                   TextColor="White"
+                   HorizontalTextAlignment="Center" />
+
+            <VerticalStackLayout Margin="18,0" Spacing="5">
+
+                <Border Style="{StaticResource NavItemActive}">
+                    <Label Text="Menu główne"
+                           FontAttributes="Bold"
+                           FontSize="14"
+                           FontFamily="IBMPlexSansSemibold"
+                           TextColor="#1B2430"
+                           VerticalOptions="Center" />
+                </Border>
+
+                <Border Style="{StaticResource NavItem}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnScanQrTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="Skanuj kod QR"
+                           FontSize="14"
+                           TextColor="#CCF3F4EF"
+                           VerticalOptions="Center" />
+                </Border>
+
+                <Border Style="{StaticResource NavItem}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnManageClassesTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="Zarządzaj klasami"
+                           FontSize="14"
+                           TextColor="#CCF3F4EF"
+                           VerticalOptions="Center" />
+                </Border>
+
+                <Border Style="{StaticResource NavItem}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnStationsTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="Stanowiska"
+                           FontSize="14"
+                           TextColor="#CCF3F4EF"
+                           VerticalOptions="Center" />
+                </Border>
+
+                <Border Style="{StaticResource NavItem}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnHistoryTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="Historia skanów"
+                           FontSize="14"
+                           TextColor="#CCF3F4EF"
+                           VerticalOptions="Center" />
+                </Border>
+
+                <Border Style="{StaticResource NavItem}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSettingsTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="Ustawienia"
+                           FontSize="14"
+                           TextColor="#CCF3F4EF"
+                           VerticalOptions="Center" />
+                </Border>
+
+            </VerticalStackLayout>
         </VerticalStackLayout>
-    </ScrollView>
+
+        <!-- ===================== GŁÓWNA TREŚĆ ===================== -->
+        <ScrollView Grid.Column="1">
+            <VerticalStackLayout Margin="34,30,34,24" Spacing="22">
+
+                <!-- Nagłówek -->
+                <Grid ColumnDefinitions="*,Auto">
+
+                    <VerticalStackLayout Grid.Column="0" Spacing="4">
+                        <Label x:Name="salaLabel"
+                               Text="Sala komputerowa P1"
+                               FontAttributes="Bold"
+                               FontSize="24"
+                               FontFamily="IBMPlexSansBold"
+                               TextColor="#1B2430" />
+                        <Label x:Name="stanowiskaLabel"
+                               Text="Liczba stanowisk: 17"
+                               FontSize="14"
+                               FontFamily="IBMPlexSansRegular"
+                               TextColor="#72625A" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="1" HorizontalOptions="End">
+                        <Label x:Name="dzienLabel"
+                               Text="Środa"
+                               FontAttributes="Bold"
+                               FontSize="13"
+                               FontFamily="IBMPlexSansSemiBold"
+                               TextColor="#1B2430"
+                               HorizontalTextAlignment="End" />
+                        <Label x:Name="dataLabel"
+                               Text="14 września 2026"
+                               FontSize="12"
+                               FontFamily="IBMPlexMonoRegular"
+                               TextColor="#991B2430"
+                               HorizontalTextAlignment="End" />
+                        <Label x:Name="godzinaLabel"
+                               Text="10:24"
+                               FontSize="12"
+                               FontFamily="IBMPlexMonoRegular"
+                               TextColor="#991B2430"
+                               HorizontalTextAlignment="End" />
+                    </VerticalStackLayout>
+
+                </Grid>
+
+                <!-- Przyciski szybkich akcji -->
+                <HorizontalStackLayout Spacing="18">
+
+                    <Border StrokeShape="Rectangle" Stroke="#1B2430" StrokeThickness="1"
+                            BackgroundColor="#FF6A2B" WidthRequest="289" HeightRequest="150" Padding="22,24">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnScanQrTapped" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout VerticalOptions="End" Spacing="5">
+                            <Label Text="Skanuj kod QR" FontAttributes="Bold" FontSize="16" FontFamily="IBMPlexSansBold" TextColor="#1B2430" />
+                            <Label Text="Rozpoznaj stanowisko i przypisz ucznia" FontSize="13" FontFamily="IBMPlexSansRegular" TextColor="#B21B2430" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Style="{StaticResource ActionCard}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnManageClassesTapped" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout VerticalOptions="End" Spacing="5">
+                            <Label Text="Zarządzaj klasami" FontAttributes="Bold" FontSize="16" FontFamily="IBMPlexSansBold" TextColor="#1B2430" />
+                            <Label Text="Podgląd i edycja uczniów w bazie" FontSize="13" FontFamily="IBMPlexSansRegular" TextColor="#A61B2430" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Style="{StaticResource ActionCard}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnHistoryTapped" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout VerticalOptions="End" Spacing="5">
+                            <Label Text="Historia skanów" FontAttributes="Bold" FontSize="16" FontFamily="IBMPlexSansBold" TextColor="#1B2430" />
+                            <Label Text="Wszystkie skany z tej i poprzednich sal" FontSize="13" FontFamily="IBMPlexSansRegular" TextColor="#A61B2430" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                </HorizontalStackLayout>
+
+                <!-- Pasek postępu -->
+                <Border StrokeShape="Rectangle" Stroke="#1A1B2430" StrokeThickness="1"
+                        BackgroundColor="#E4E6E0" HeightRequest="53" Padding="21,0">
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="18" VerticalOptions="Center">
+
+                        <Label Grid.Column="0" x:Name="ProgressCountLabel"
+                               Text="13 / 17" FontAttributes="Bold" FontSize="15" FontFamily="IBMPlexMonoBold"
+                               TextColor="#1B2430" VerticalOptions="Center" />
+
+                        <Border Grid.Column="1" BackgroundColor="#C9CDC3" HeightRequest="8"
+                                StrokeThickness="0" VerticalOptions="Center" Padding="0">
+                            <BoxView x:Name="ProgressFill"
+                                     BackgroundColor="#FF6A2B"
+                                     HorizontalOptions="Start"
+                                     WidthRequest="230"
+                                     HeightRequest="8" />
+                        </Border>
+
+                        <Label Grid.Column="2" Text="stanowisk przypisanych dziś"
+                               FontSize="13" TextColor="#991B2430" FontFamily="IBMPlexSansRegular" VerticalOptions="Center" />
+
+                    </Grid>
+                </Border>
+
+                <!-- Ostatnie skany -->
+                <VerticalStackLayout Spacing="0">
+
+                    <Label Text="OSTATNIE SKANY" FontAttributes="Bold" FontSize="13" FontFamily="IBMPlexSansSemiBold"
+                           TextColor="#8C1B2430" CharacterSpacing="0.6" Margin="0,0,0,10" />
+
+                    <Grid ColumnDefinitions="39,20,80,*" Padding="0,10" ColumnSpacing="14">
+                        <BoxView Grid.ColumnSpan="4" HeightRequest="1" Color="#1A1B2430" VerticalOptions="Start" Margin="0,-10,0,0"/>
+                        <Label Grid.Column="0" Text="10:18" FontSize="13" TextColor="#8C1B2430" FontFamily="IBMPlexMonoRegular" VerticalOptions="Center" />
+                        <Ellipse Grid.Column="1" Fill="#2E9E6D" WidthRequest="8" HeightRequest="8" HorizontalOptions="Center" VerticalOptions="Center" />
+                        <Label Grid.Column="2" Text="STAN. 07" FontAttributes="Bold" FontSize="12" TextColor="#1B2430" VerticalOptions="Center" />
+                        <Label Grid.Column="3" Text="Javonster Javowy - 5TP 1" FontSize="13" FontFamily="IBMPlexSansRegular" TextColor="#1B2430" VerticalOptions="Center" />
+                    </Grid>
+
+                    <Grid ColumnDefinitions="39,20,80,*" Padding="0,10" ColumnSpacing="14">
+                        <BoxView Grid.ColumnSpan="4" HeightRequest="1" Color="#1A1B2430" VerticalOptions="Start" Margin="0,-10,0,0"/>
+                        <Label Grid.Column="0" Text="10:11" FontSize="13" TextColor="#8C1B2430" FontFamily="IBMPlexMonoRegular" VerticalOptions="Center" />
+                        <Ellipse Grid.Column="1" Fill="#2E9E6D" WidthRequest="8" HeightRequest="8" HorizontalOptions="Center" VerticalOptions="Center" />
+                        <Label Grid.Column="2" Text="STAN. 03" FontAttributes="Bold" FontSize="12" TextColor="#1B2430" VerticalOptions="Center" />
+                        <Label Grid.Column="3" Text="Fonk Skibididonk - 5TP 1" FontSize="13" FontFamily="IBMPlexSansRegular" TextColor="#1B2430" VerticalOptions="Center" />
+                    </Grid>
+                    
+                    
+
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+    </Grid>
 
 </ContentPage>

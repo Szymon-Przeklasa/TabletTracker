@@ -2,23 +2,34 @@
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
-
         public MainPage()
         {
             InitializeComponent();
         }
 
-        private void OnCounterClicked(object? sender, EventArgs e)
+        private void OnScanQrTapped(object? sender, EventArgs e)
         {
-            count++;
+            // TODO: nawigacja do ekranu skanowania kodu QR
+        }
 
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
+        private void OnManageClassesTapped(object? sender, EventArgs e)
+        {
+            // TODO: nawigacja do zarządzania klasami
+        }
 
-            SemanticScreenReader.Announce(CounterBtn.Text);
+        private void OnStationsTapped(object? sender, EventArgs e)
+        {
+            // TODO: nawigacja do widoku stanowisk
+        }
+
+        private void OnHistoryTapped(object? sender, EventArgs e)
+        {
+            // TODO: nawigacja do historii skanów
+        }
+
+        private void OnSettingsTapped(object? sender, EventArgs e)
+        {
+            // TODO: nawigacja do ustawień
         }
     }
 }
