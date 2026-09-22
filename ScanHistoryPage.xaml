@@ -14,19 +14,27 @@
 
             <VerticalStackLayout Grid.Row="0" Spacing="4">
                 <Label Text="Historia skanów" Style="{StaticResource PageTitle}" />
-                <Label Text="Sala P1 — wszystkie zapisy" Style="{StaticResource PageSubtitle}" />
+                <Label x:Name="SubtitleLabel" Text="Wszystkie zapisy" Style="{StaticResource PageSubtitle}" />
             </VerticalStackLayout>
 
             <!-- Pasek filtrów -->
             <Grid Grid.Row="1" ColumnDefinitions="Auto,Auto,*" ColumnSpacing="10">
-                <Border Grid.Column="0" Style="{StaticResource FieldFrame}" WidthRequest="120">
-                    <Label Text="14.09.2026" FontSize="12.5" TextColor="#A6727F8C" Margin="15,0" VerticalOptions="Center" />
+                <Border Grid.Column="0" Style="{StaticResource FieldFrame}" WidthRequest="180">
+                    <Picker x:Name="DateFilterPicker" Title="Data: wszystkie"
+                            FontSize="12.5" TextColor="#727F8C" Margin="15,0"
+                            VerticalOptions="Center"
+                            SelectedIndexChanged="OnDateFilterChanged" />
                 </Border>
-                <Border Grid.Column="1" Style="{StaticResource FieldFrame}" WidthRequest="140">
-                    <Label Text="Klasa: wszystkie" FontSize="12.5" TextColor="#A6727F8C" Margin="15,0" VerticalOptions="Center" />
+                <Border Grid.Column="1" Style="{StaticResource FieldFrame}" WidthRequest="190">
+                    <Picker x:Name="ClassFilterPicker" Title="Klasa: wszystkie"
+                            FontSize="12.5" TextColor="#727F8C" Margin="15,0"
+                            VerticalOptions="Center"
+                            SelectedIndexChanged="OnClassFilterChanged" />
                 </Border>
                 <Border Grid.Column="2" Style="{StaticResource FieldFrame}">
-                    <Entry Placeholder="Szukaj w historii" Style="{StaticResource FieldEntry}" Margin="42,0" />
+                    <Entry x:Name="SearchEntry" Placeholder="Szukaj (uczeń, tablet, stanowisko)"
+                           Style="{StaticResource FieldEntry}" Margin="15,0"
+                           TextChanged="OnSearchChanged" />
                 </Border>
             </Grid>
 
@@ -34,29 +42,30 @@
             <Grid Grid.Row="2" RowDefinitions="Auto,*">
 
                 <!-- Nagłówek tabeli -->
-                <Grid Grid.Row="0" ColumnDefinitions="95,113,90,201,90,147,*" Padding="10,8"
-                      >
+                <Grid Grid.Row="0" ColumnDefinitions="72,72,70,110,*,105,130" Padding="10,8">
                     <BoxView Grid.ColumnSpan="7" HeightRequest="1" Color="{StaticResource BorderStrong}" VerticalOptions="End" />
                     <Label Grid.Column="0" Text="DATA" Style="{StaticResource SectionLabel}" />
                     <Label Grid.Column="1" Text="GODZINA" Style="{StaticResource SectionLabel}" />
                     <Label Grid.Column="2" Text="STAN." Style="{StaticResource SectionLabel}" />
-                    <Label Grid.Column="3" Text="UCZEŃ" Style="{StaticResource SectionLabel}" />
-                    <Label Grid.Column="4" Text="KLASA" Style="{StaticResource SectionLabel}" />
-                    <Label Grid.Column="5" Text="NAUCZYCIEL" Style="{StaticResource SectionLabel}" />
+                    <Label Grid.Column="3" Text="TABLET" Style="{StaticResource SectionLabel}" />
+                    <Label Grid.Column="4" Text="UCZEŃ" Style="{StaticResource SectionLabel}" />
+                    <Label Grid.Column="5" Text="KLASA" Style="{StaticResource SectionLabel}" />
+                    <Label Grid.Column="6" Text="NAUCZYCIEL" Style="{StaticResource SectionLabel}" />
                 </Grid>
 
                 <!-- Wiersze -->
                 <CollectionView Grid.Row="1" ItemsSource="{Binding Entries}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid ColumnDefinitions="95,113,90,201,90,147,*" Padding="10,12">
+                            <Grid ColumnDefinitions="72,72,70,110,*,105,130" Padding="10,12">
                                 <BoxView Grid.ColumnSpan="7" HeightRequest="1" Color="{StaticResource BorderHairline}" VerticalOptions="End" />
                                 <Label Grid.Column="0" Text="{Binding Date}" FontSize="13" TextColor="{StaticResource TextPrimary}" />
                                 <Label Grid.Column="1" Text="{Binding Time}" FontSize="13" TextColor="{StaticResource TextPrimary}" />
                                 <Label Grid.Column="2" Text="{Binding Station}" FontSize="13" TextColor="{StaticResource TextPrimary}" />
-                                <Label Grid.Column="3" Text="{Binding Student}" FontSize="13" TextColor="{StaticResource TextPrimary}" />
-                                <Label Grid.Column="4" Text="{Binding Class}" FontSize="13" TextColor="{StaticResource TextPrimary}" />
-                                <Label Grid.Column="5" Text="{Binding Teacher}" FontSize="13" TextColor="{StaticResource TextPrimary}" />
+                                <Label Grid.Column="3" Text="{Binding Tablet}" FontSize="13" TextColor="{StaticResource TextPrimary}" />
+                                <Label Grid.Column="4" Text="{Binding Student}" FontSize="13" TextColor="{StaticResource TextPrimary}" />
+                                <Label Grid.Column="5" Text="{Binding Class}" FontSize="13" TextColor="{StaticResource TextPrimary}" />
+                                <Label Grid.Column="6" Text="{Binding Teacher}" FontSize="13" TextColor="{StaticResource TextPrimary}" />
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

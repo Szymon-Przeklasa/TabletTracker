@@ -10,30 +10,61 @@
 
         <controls:SidebarView Grid.Column="0" ActiveRoute="Classes" />
 
-        <Grid Grid.Column="1" RowDefinitions="Auto,*,Auto" Padding="34,30,34,20" RowSpacing="16">
+        <Grid Grid.Column="1" RowDefinitions="Auto,Auto,Auto,*,Auto"
+              Padding="34,30,34,20" RowSpacing="16">
 
-            <!-- Pasek: aktualna klasa -->
-            <Border Grid.Row="0" BackgroundColor="{StaticResource CardMuted}" Stroke="{StaticResource BorderHairline}" StrokeThickness="1" Padding="19,15">
-                <Grid ColumnDefinitions="Auto,Auto,*,Auto" ColumnSpacing="16" VerticalOptions="Center">
-                    <Border Grid.Column="0" BackgroundColor="{StaticResource SidebarBackground}" Padding="10,5" StrokeThickness="0">
-                        <Label Text="ZARZĄDZANIE" FontSize="13.5" FontAttributes="Bold" TextColor="{StaticResource TextOnDark}" />
+            <VerticalStackLayout Grid.Row="0" Spacing="4">
+                <Label Text="Zarządzaj klasami" Style="{StaticResource PageTitle}" />
+                <Label x:Name="SubtitleLabel" Text="Dodawanie i usuwanie klas oraz uczniów"
+                       Style="{StaticResource PageSubtitle}" />
+            </VerticalStackLayout>
+
+            <!-- Pasek: dodawanie / usuwanie klasy -->
+            <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="16">
+                <Border Grid.Column="0" Style="{StaticResource FieldFrame}">
+                    <Entry x:Name="ClassNameEntry"
+                           Placeholder="Nazwa klasy, np. 5TP 1"
+                           Style="{StaticResource FieldEntry}" Margin="17,0" />
+                </Border>
+                <Button Grid.Column="1" Text="Dodaj klasę"
+                        Style="{StaticResource PrimaryButton}" Clicked="OnAddClassClicked" />
+                <Button Grid.Column="2" x:Name="RemoveClassButton"
+                        Text="Usuń klasę"
+                        Style="{StaticResource PrimaryButton}" Clicked="OnRemoveClassClicked" />
+            </Grid>
+
+            <!-- Pasek: wybór klasy -->
+            <Border Grid.Row="2" BackgroundColor="{StaticResource CardMuted}"
+                    Stroke="{StaticResource BorderHairline}" StrokeThickness="1"
+                    Padding="19,15">
+                <Grid ColumnDefinitions="Auto,16,*,Auto" ColumnSpacing="16" VerticalOptions="Center">
+                    <Border Grid.Column="0" BackgroundColor="{StaticResource SidebarBackground}"
+                            Padding="10,5" StrokeThickness="0">
+                        <Label Text="KLASA" FontSize="13.5" FontAttributes="Bold"
+                               TextColor="{StaticResource TextOnDark}" />
                     </Border>
-                    <BoxView Grid.Column="1" WidthRequest="1" HeightRequest="18" Color="{StaticResource BorderSoft}" />
-                    <Label Grid.Column="2" Text="Klasa 2TI 2" FontSize="13.5" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
-                    <Label Grid.Column="3" Text="Zmień klasę" FontSize="13.5" TextColor="#99727F8C" VerticalOptions="Center" />
+                    <Picker x:Name="ClassPicker" Grid.Column="2"
+                            Title="Wybierz klasę" FontSize="14.5"
+                            TextColor="{StaticResource TextPrimary}"
+                            SelectedIndexChanged="OnClassChanged" />
+                    <Label Grid.Column="3" x:Name="StudentsCountLabel" Text="0 uczniów"
+                           FontSize="13" TextColor="#99727F8C" VerticalOptions="Center" />
                 </Grid>
             </Border>
 
             <!-- Lista uczniów -->
-            <CollectionView Grid.Row="1" ItemsSource="{Binding Students}"
-                             SelectionMode="Single" SelectedItem="{Binding SelectedStudent}">
+            <CollectionView Grid.Row="3" x:Name="StudentsList"
+                            ItemsSource="{Binding Students}"
+                            SelectionMode="Single"
+                            SelectionChanged="OnStudentSelectionChanged">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="14,12" ColumnDefinitions="34,12,*,Auto" ColumnSpacing="0">
-                            <Grid.GestureRecognizers/>
-                            <BoxView Grid.ColumnSpan="4" HeightRequest="1" Color="{StaticResource BorderHairline}" VerticalOptions="Start" />
+                            <BoxView Grid.ColumnSpan="4" HeightRequest="1"
+                                     Color="{StaticResource BorderHairline}" VerticalOptions="Start" />
 
-                            <Border Grid.Column="0" WidthRequest="34" HeightRequest="34" StrokeThickness="0"
+                            <Border Grid.Column="0" WidthRequest="34" HeightRequest="34"
+                                    StrokeThickness="0"
                                     BackgroundColor="{Binding IsSelected, Converter={StaticResource AvatarBgConverter}}"
                                     StrokeShape="RoundRectangle 17">
                                 <Label Text="{Binding Initials}" FontSize="12" FontAttributes="Bold"
@@ -45,19 +76,25 @@
                                    TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
 
                             <Label Grid.Column="3" Text="✓" IsVisible="{Binding IsSelected}"
-                                   FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
+                                   FontAttributes="Bold" TextColor="{StaticResource TextPrimary}"
+                                   VerticalOptions="Center" />
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <!-- Dolny pasek: pole + akcje -->
-            <Grid Grid.Row="2" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="16">
+            <!-- Dolny pasek: dodawanie / usuwanie ucznia -->
+            <Grid Grid.Row="4" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="16">
                 <Border Grid.Column="0" Style="{StaticResource FieldFrame}">
-                    <Entry Placeholder="Wpisz ucznia do dodania" Style="{StaticResource FieldEntry}" Margin="17,0" />
+                    <Entry x:Name="StudentNameEntry"
+                           Placeholder="Wpisz ucznia do dodania"
+                           Style="{StaticResource FieldEntry}" Margin="17,0" />
                 </Border>
-                <Button Grid.Column="1" Text="Dodaj ucznia" Style="{StaticResource PrimaryButton}" />
-                <Button Grid.Column="2" Text="Usuń ucznia" Style="{StaticResource PrimaryButton}" />
+                <Button Grid.Column="1" Text="Dodaj ucznia"
+                        Style="{StaticResource PrimaryButton}" Clicked="OnAddStudentClicked" />
+                <Button Grid.Column="2" x:Name="RemoveStudentButton"
+                        Text="Usuń ucznia" Style="{StaticResource PrimaryButton}"
+                        IsVisible="False" Clicked="OnRemoveStudentClicked" />
             </Grid>
 
         </Grid>

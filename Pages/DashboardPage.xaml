@@ -17,12 +17,12 @@
                 <Grid ColumnDefinitions="*,Auto">
                     <VerticalStackLayout Grid.Column="0" Spacing="4">
                         <Label Text="Sala komputerowa P1" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
-                        <Label Text="Liczba stanowisk: 17" FontSize="14" TextColor="#99727F8C" />
+                        <Label x:Name="StationCountLabel" Text="Liczba stanowisk: 0" FontSize="14" TextColor="#99727F8C" />
                     </VerticalStackLayout>
                     <VerticalStackLayout Grid.Column="1" Spacing="4" HorizontalOptions="End">
-                        <Label Text="Środa" FontSize="13" FontAttributes="Bold" HorizontalTextAlignment="End" TextColor="{StaticResource TextPrimary}" />
-                        <Label Text="14 września 2026" FontSize="12" TextColor="#99727F8C" />
-                        <Label Text="10:24" FontSize="12" HorizontalTextAlignment="End" TextColor="#99727F8C" />
+                        <Label x:Name="DayLabel" Text="—" FontSize="13" FontAttributes="Bold" HorizontalTextAlignment="End" TextColor="{StaticResource TextPrimary}" />
+                        <Label x:Name="DateLabel" Text="—" FontSize="12" TextColor="#99727F8C" />
+                        <Label x:Name="TimeLabel" Text="—" FontSize="12" HorizontalTextAlignment="End" TextColor="#99727F8C" />
                     </VerticalStackLayout>
                 </Grid>
 
@@ -66,10 +66,10 @@
                 <!-- Pasek postępu -->
                 <Border BackgroundColor="{StaticResource CardMuted}" Stroke="{StaticResource BorderHairline}" StrokeThickness="1" Padding="21,17">
                     <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="16" VerticalOptions="Center">
-                        <Label Grid.Column="0" Text="13 / 17" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
-                        <ProgressBar Grid.Column="1" Progress="0.76" ProgressColor="{StaticResource Accent}"
+                        <Label Grid.Column="0" x:Name="ProgressTextLabel" Text="0 / 0" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
+                        <ProgressBar Grid.Column="1" x:Name="ProgressBarControl" Progress="0" ProgressColor="{StaticResource Accent}"
                                      BackgroundColor="{StaticResource BorderSoft}" VerticalOptions="Center" HeightRequest="8" />
-                        <Label Grid.Column="2" Text="stanowisk przypisanych dziś" FontSize="13" TextColor="#99727F8C" VerticalOptions="Center" />
+                        <Label Grid.Column="2" x:Name="ProgressCaptionLabel" Text="stanowisk przypisanych" FontSize="13" TextColor="#99727F8C" VerticalOptions="Center" />
                     </Grid>
                 </Border>
 

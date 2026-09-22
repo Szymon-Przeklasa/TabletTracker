@@ -2,64 +2,48 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:TabletTracker.Controls"
-             x:Class="TabletTracker.Pages.StationsPage"
-             Title="Stanowiska"
+             x:Class="TabletTracker.Pages.AssignStationPage"
+             Title="Wybierz stanowisko"
              BackgroundColor="{StaticResource AppBackground}">
 
     <Grid ColumnDefinitions="224,*">
 
-        <controls:SidebarView Grid.Column="0" ActiveRoute="Stations" />
+        <controls:SidebarView Grid.Column="0" ActiveRoute="Scan" />
 
         <Grid Grid.Column="1" RowDefinitions="Auto,Auto,Auto,Auto,*"
               Padding="34,30,34,20" RowSpacing="16">
 
-            <VerticalStackLayout Grid.Row="0" Spacing="4">
-                <Label Text="Stanowiska" Style="{StaticResource PageTitle}" />
-                <Label x:Name="SubtitleLabel" Text="Sala P1" Style="{StaticResource PageSubtitle}" />
-            </VerticalStackLayout>
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                <VerticalStackLayout Grid.Column="0" Spacing="4">
+                    <Label Text="Wybierz stanowisko" Style="{StaticResource PageTitle}" />
+                    <Label Text="Kliknij stanowisko, aby przypisać do niego tablet i ucznia"
+                           Style="{StaticResource PageSubtitle}" />
+                </VerticalStackLayout>
+                <Button Grid.Column="1" Text="Anuluj — wróć do skanowania"
+                        Style="{StaticResource OutlineButton}"
+                        Padding="18,0" VerticalOptions="Start"
+                        Clicked="OnCancelClicked" />
+            </Grid>
 
-<!-- Pasek statystyk -->
+            <!-- Zeskanowany tablet -->
             <Border Grid.Row="1" BackgroundColor="{StaticResource CardMuted}"
                     Stroke="{StaticResource BorderHairline}" StrokeThickness="1"
                     Padding="19,15">
-                <Grid ColumnDefinitions="Auto,16,Auto,16,Auto,16,Auto,*,Auto" ColumnSpacing="0" VerticalOptions="Center">
-                    <Label Grid.Column="0" Text="Przypisane:" FontSize="13" TextColor="#99727F8C" />
-                    <Label Grid.Column="1" x:Name="AssignedCountLabel" Text="0"
-                           FontSize="13" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
-                    <Label Grid.Column="2" Text="Wolne:" FontSize="13" TextColor="#99727F8C" />
-                    <Label Grid.Column="3" x:Name="FreeCountLabel" Text="0"
-                           FontSize="13" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
-                    <Label Grid.Column="4" Text="Razem:" FontSize="13" TextColor="#99727F8C" />
-                    <Label Grid.Column="5" x:Name="TotalCountLabel" Text="0"
-                           FontSize="13" FontAttributes="Bold" TextColor="{StaticResource TextPrimary}" />
-                    <Button Grid.Column="7" Text="Zdejmij przypisanie ze wszystkich"
-                            Style="{StaticResource OutlineButton}" FontSize="12"
-                            Padding="20,0" HeightRequest="34" HorizontalOptions="End"
-                            Clicked="OnUnassignAllClicked" />
+                <Grid ColumnDefinitions="Auto,12,*" ColumnSpacing="16" VerticalOptions="Center">
+                    <Border Grid.Column="0" BackgroundColor="{StaticResource SidebarBackground}"
+                            Padding="10,5" StrokeThickness="0">
+                        <Label x:Name="TabletIdLabel" Text="—"
+                               FontSize="13.5" FontAttributes="Bold"
+                               TextColor="{StaticResource TextOnDark}" />
+                    </Border>
+                    <Label Grid.Column="2" Text="Tablet zeskanowany z QR — wybierz stanowisko"
+                           FontSize="13.5" TextColor="{StaticResource TextPrimary}"
+                           VerticalOptions="Center" />
                 </Grid>
             </Border>
 
-            <!-- Dodawanie / usuwanie stanowisk -->
-            <Grid Grid.Row="2" ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="16">
-                <Border Grid.Column="0" Style="{StaticResource FieldFrame}">
-                    <Entry x:Name="StationCodeEntry"
-                           Placeholder="Kod stanowiska, np. 18"
-                           Style="{StaticResource FieldEntry}" Margin="17,0" />
-                </Border>
-                <Button Grid.Column="1" Text="Dodaj stanowisko"
-                        Style="{StaticResource PrimaryButton}" Clicked="OnAddStationClicked" />
-                <Button Grid.Column="2" x:Name="UnassignStationButton"
-                        Text="Zdejmij przypisanie"
-                        Style="{StaticResource PrimaryButton}" IsVisible="False"
-                        Clicked="OnUnassignStationClicked" />
-                <Button Grid.Column="3" x:Name="RemoveStationButton"
-                        Text="Usuń stanowisko"
-                        Style="{StaticResource PrimaryButton}" IsVisible="False"
-                        Clicked="OnRemoveStationClicked" />
-            </Grid>
-
             <!-- Filtry -->
-            <HorizontalStackLayout Grid.Row="3" Spacing="10">
+            <HorizontalStackLayout Grid.Row="2" Spacing="10">
                 <Button x:Name="FilterAllButton" Text="Wszystkie"
                         Style="{StaticResource OutlineButtonActive}" WidthRequest="94"
                         Padding="17,0" Clicked="OnFilterAllClicked" />
@@ -72,10 +56,10 @@
             </HorizontalStackLayout>
 
             <!-- Siatka stanowisk -->
-            <CollectionView Grid.Row="4" x:Name="StationsGrid"
+            <CollectionView Grid.Row="3" x:Name="StationsGrid"
                             ItemsSource="{Binding Stations}"
                             SelectionMode="Single"
-                            SelectionChanged="OnStationSelectionChanged">
+                            SelectionChanged="OnStationSelected">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="5"
                                      HorizontalItemSpacing="10" VerticalItemSpacing="10" />

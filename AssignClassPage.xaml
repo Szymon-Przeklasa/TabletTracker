@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:TabletTracker.Controls"
+             x:Class="TabletTracker.Pages.AssignClassPage"
+             Title="Przypisz klasę i ucznia"
+             BackgroundColor="{StaticResource AppBackground}">
+
+    <Grid ColumnDefinitions="224,*">
+
+        <controls:SidebarView Grid.Column="0" ActiveRoute="Scan" />
+
+        <Grid Grid.Column="1" RowDefinitions="Auto,Auto,Auto,*,Auto" Padding="34,30,34,20" RowSpacing="16">
+
+            <VerticalStackLayout Grid.Row="0" Spacing="4">
+                <Label Text="Przypisz klasę i ucznia" Style="{StaticResource PageTitle}" />
+                <Label Text="Wybierz klasę, następnie ucznia" Style="{StaticResource PageSubtitle}" />
+            </VerticalStackLayout>
+
+            <!-- Stanowisko + tablet -->
+            <Border Grid.Row="1" BackgroundColor="{StaticResource CardMuted}"
+                    Stroke="{StaticResource BorderHairline}" StrokeThickness="1"
+                    Padding="19,15">
+                <Grid ColumnDefinitions="Auto,12,Auto,12,*" ColumnSpacing="16" VerticalOptions="Center">
+                    <Border Grid.Column="0" BackgroundColor="{StaticResource SidebarBackground}"
+                            Padding="10,5" StrokeThickness="0">
+                        <Label x:Name="StationLabel" Text="—"
+                               FontSize="13.5" FontAttributes="Bold"
+                               TextColor="{StaticResource TextOnDark}" />
+                    </Border>
+                    <Border Grid.Column="2" BackgroundColor="{StaticResource SidebarBackground}"
+                            Padding="10,5" StrokeThickness="0">
+                        <Label x:Name="TabletIdLabel" Text="—"
+                               FontSize="13.5" FontAttributes="Bold"
+                               TextColor="{StaticResource TextOnDark}" />
+                    </Border>
+                    <Label Grid.Column="4" Text="Przypisz ucznia do tego stanowiska"
+                           FontSize="13.5" TextColor="{StaticResource TextPrimary}"
+                           VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <!-- KLASA -->
+            <VerticalStackLayout Grid.Row="2" Spacing="8">
+                <Label Text="KLASA" Style="{StaticResource SectionLabel}" />
+                <Border Style="{StaticResource FieldFrame}">
+                    <Picker x:Name="ClassPicker"
+                            Title="Wybierz klasę"
+                            FontSize="14.5" TextColor="{StaticResource TextPrimary}"
+                            Margin="15,0"
+                            SelectedIndexChanged="OnClassChanged" />
+                </Border>
+                <Label x:Name="NoClassesHint"
+                       Text="Brak klas — dodaj klasę w zakładce „Zarządzaj klasami”."
+                       FontSize="12.5" TextColor="#99727F8C" IsVisible="False" />
+            </VerticalStackLayout>
+
+            <!-- UCZEŃ -->
+            <Grid Grid.Row="3" RowDefinitions="Auto,*" RowSpacing="8">
+                <Label Grid.Row="0" Text="UCZEŃ" Style="{StaticResource SectionLabel}" />
+                <CollectionView Grid.Row="1" x:Name="StudentsList"
+                                SelectionMode="Single"
+                                SelectionChanged="OnStudentSelected">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="14,10" ColumnDefinitions="34,12,*,Auto" ColumnSpacing="0">
+                                <BoxView Grid.ColumnSpan="4" HeightRequest="1"
+                                         Color="{StaticResource BorderHairline}"
+                                         VerticalOptions="Start" />
+                                <Border Grid.Column="0" WidthRequest="34" HeightRequest="34"
+                                        StrokeThickness="0"
+                                        BackgroundColor="{Binding IsSelected, Converter={StaticResource AvatarBgConverter}}"
+                                        StrokeShape="RoundRectangle 17">
+                                    <Label Text="{Binding Initials}" FontSize="12"
+                                           FontAttributes="Bold" TextColor="{StaticResource TextPrimary}"
+                                           HorizontalOptions="Center" VerticalOptions="Center" />
+                                </Border>
+                                <Label Grid.Column="2" Text="{Binding FullName}" FontSize="14.5"
+                                       TextColor="{StaticResource TextPrimary}" VerticalOptions="Center" />
+                                <Label Grid.Column="3" Text="✓"
+                                       IsVisible="{Binding IsSelected}"
+                                       FontAttributes="Bold" TextColor="{StaticResource TextPrimary}"
+                                       VerticalOptions="Center" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Label Grid.Row="1" x:Name="NoClassHint"
+                       Text="Najpierw wybierz klasę, aby zobaczyć uczniów."
+                       FontSize="12.5" TextColor="#99727F8C" IsVisible="False" />
+            </Grid>
+
+            <!-- Dolne akcje -->
+            <Grid Grid.Row="4" ColumnDefinitions="Auto,Auto,*,Auto" ColumnSpacing="16">
+                <Button Grid.Column="0" Text="Wstecz"
+                        Style="{StaticResource OutlineButton}" Padding="20,0"
+                        Clicked="OnBackClicked" />
+                <Button Grid.Column="1" x:Name="UnassignButton"
+                        Text="Zdejmij przypisanie"
+                        Style="{StaticResource OutlineButton}"
+                        IsVisible="False" Clicked="OnUnassignClicked" />
+                <Button Grid.Column="3" x:Name="AssignButton"
+                        Text="Przypisz ucznia"
+                        Style="{StaticResource PrimaryButton}"
+                        IsEnabled="False" Clicked="OnAssignClicked" />
+            </Grid>
+
+        </Grid>
+    </Grid>
+</ContentPage>

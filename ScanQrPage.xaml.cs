@@ -9,6 +9,8 @@ public partial class ScanQrPage : ContentPage
         DeviceInfo.Platform == DevicePlatform.iOS ||
         DeviceInfo.Platform == DevicePlatform.MacCatalyst;
 
+    private bool _navigating;
+
     public ScanQrPage()
     {
         InitializeComponent();
@@ -70,24 +72,20 @@ public partial class ScanQrPage : ContentPage
 
     private void OnBarcodesDetected(object sender, BarcodeDetectionEventArgs e)
     {
-        var result = e.Results?.FirstOrDefault();
-        if (result is null || string.IsNullOrWhiteSpace(result.Value))
+        var result = e.Results?.FirstOrDefault(r => !string.IsNullOrWhiteSpace(r.Value));
+        if (result is null)
             return;
 
-        Dispatcher.Dispatch(() =>
+        Dispatcher.Dispatch(async () =>
         {
-            CameraBarcodeReader.IsDetecting = false;
-            StationCodeLabel.Text = result.Value;
-            ScannerArea.IsVisible = false;
-            ResultPanel.IsVisible = true;
-        });
-    }
+            if (_navigating)
+                return;
 
-    private void OnRescanClicked(object sender, EventArgs e)
-    {
-        ScannerArea.IsVisible = true;
-        ResultPanel.IsVisible = false;
-        CameraBarcodeReader.IsDetecting = true;
+            _navigating = true;
+            CameraBarcodeReader.IsDetecting = false;
+            await Shell.Current.GoToAsync($"AssignStation?code={Uri.EscapeDataString(result.Value)}");
+            _navigating = false;
+        });
     }
 
     private void ShowUnsupported(string message)

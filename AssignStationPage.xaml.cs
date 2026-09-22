@@ -5,18 +5,29 @@ using TabletTracker.Services;
 
 namespace TabletTracker.Pages;
 
-public partial class StationsPage : ContentPage
+public partial class AssignStationPage : ContentPage, IQueryAttributable
 {
     private readonly DataStore _store = DataStore.Instance;
 
     public ObservableCollection<StationItem> Stations { get; } = new();
 
+    private string _tabletId = "";
     private string _filter = "All";
+    private bool _navigating;
 
-    public StationsPage()
+    public AssignStationPage()
     {
         InitializeComponent();
         BindingContext = this;
+    }
+
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (query.TryGetValue("code", out var value) && value is string code && !string.IsNullOrWhiteSpace(code))
+        {
+            _tabletId = DataStore.NormalizeCode(code);
+            TabletIdLabel.Text = DisplayTabletId(_tabletId);
+        }
     }
 
     protected override void OnAppearing()
@@ -42,8 +53,6 @@ public partial class StationsPage : ContentPage
     private void RefreshAll()
     {
         var data = _store.Data;
-
-        var assigned = 0;
         Stations.Clear();
 
         foreach (var station in data.Stations)
@@ -51,13 +60,9 @@ public partial class StationsPage : ContentPage
             var item = new StationItem(station.Code)
             {
                 IsAssigned = station.StudentId is not null,
-                TabletInfo = string.IsNullOrWhiteSpace(station.TabletId)
-                    ? ""
-                    : $"TABLET {station.TabletId}",
+                TabletInfo = string.IsNullOrWhiteSpace(station.TabletId) ? "" : $"TABLET {station.TabletId}",
                 StudentInfo = BuildStudentInfo(station),
             };
-            if (item.IsAssigned)
-                assigned++;
 
             var show = _filter == "All"
                 || (_filter == "Assigned" && item.IsAssigned)
@@ -65,11 +70,6 @@ public partial class StationsPage : ContentPage
             if (show)
                 Stations.Add(item);
         }
-
-        AssignedCountLabel.Text = assigned.ToString();
-        FreeCountLabel.Text = (data.Stations.Count - assigned).ToString();
-        TotalCountLabel.Text = data.Stations.Count.ToString();
-        SubtitleLabel.Text = $"Sala P1 — {data.Stations.Count} stanowisk";
     }
 
     private string BuildStudentInfo(Station station)
@@ -82,75 +82,23 @@ public partial class StationsPage : ContentPage
         return string.IsNullOrWhiteSpace(cls) ? name! : $"{name} · {cls}";
     }
 
-    private void OnAddStationClicked(object sender, EventArgs e)
+    private async void OnStationSelected(object sender, SelectionChangedEventArgs e)
     {
-        var code = StationCodeEntry.Text?.Trim();
-        if (string.IsNullOrWhiteSpace(code))
+        if (_navigating)
             return;
 
-        if (_store.FindStation(code) is not null)
-        {
-            DisplayAlert("Stanowisko już istnieje", $"Stanowisko „{code}” już jest w systemie.", "OK");
-            return;
-        }
-
-        _store.Data.Stations.Add(new Station { Code = code });
-        _store.Save();
-        StationCodeEntry.Text = "";
-        RefreshAll();
-    }
-
-    private void OnUnassignStationClicked(object sender, EventArgs e)
-    {
-        if (StationsGrid.SelectedItem is not StationItem selected)
+        if (e.CurrentSelection.FirstOrDefault() is not StationItem selected)
             return;
 
-        var station = _store.FindStation(selected.Code);
-        if (station is null)
-            return;
-
-        station.TabletId = null;
-        station.StudentId = null;
-        station.AssignedAt = null;
-        _store.Save();
+        _navigating = true;
         StationsGrid.SelectedItem = null;
-        RefreshAll();
+        await Shell.Current.GoToAsync(
+            $"AssignClass?code={Uri.EscapeDataString(_tabletId)}&station={Uri.EscapeDataString(selected.Code)}");
+        _navigating = false;
     }
 
-    private void OnUnassignAllClicked(object sender, EventArgs e)
-    {
-        foreach (var station in _store.Data.Stations)
-        {
-            station.TabletId = null;
-            station.StudentId = null;
-            station.AssignedAt = null;
-        }
-        _store.Save();
-        StationsGrid.SelectedItem = null;
-        RefreshAll();
-    }
-
-    private void OnRemoveStationClicked(object sender, EventArgs e)
-    {
-        if (StationsGrid.SelectedItem is not StationItem selected)
-            return;
-
-        var station = _store.FindStation(selected.Code);
-        if (station is null)
-            return;
-
-        _store.Data.Stations.Remove(station);
-        _store.Save();
-        StationsGrid.SelectedItem = null;
-        RefreshAll();
-    }
-
-    private void OnStationSelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        var selected = e.CurrentSelection.FirstOrDefault() as StationItem;
-        RemoveStationButton.IsVisible = selected is not null;
-        UnassignStationButton.IsVisible = selected?.IsAssigned == true;
-    }
+    private async void OnCancelClicked(object sender, EventArgs e)
+        => await Shell.Current.GoToAsync("//Scan");
 
     private void SetFilter(string filter, Button active, Button other1, Button other2)
     {
@@ -170,4 +118,6 @@ public partial class StationsPage : ContentPage
 
     private void OnFilterFreeClicked(object sender, EventArgs e)
         => SetFilter("Free", FilterFreeButton, FilterAllButton, FilterAssignedButton);
+
+    private static string DisplayTabletId(string id) => id.All(char.IsDigit) ? $"TABLET {id}" : id;
 }

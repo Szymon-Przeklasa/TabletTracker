@@ -7,7 +7,7 @@
     <Grid WidthRequest="224"
           BackgroundColor="{StaticResource SidebarBackground}">
 
-        <Label Text="Nazwa aplikacji"
+        <Label Text="TabletTracker"
                TextColor="White"
                FontSize="20"
                FontAttributes="Bold"

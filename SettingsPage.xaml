@@ -17,8 +17,24 @@
                 <Label Text="Konfiguracja aplikacji" Style="{StaticResource PageSubtitle}" />
             </VerticalStackLayout>
 
-            <Label Grid.Row="1" Text="Ekran ustawień — w przygotowaniu." Style="{StaticResource MutedLabel}" />
+            <VerticalStackLayout Grid.Row="1" Spacing="12" MaximumWidthRequest="460" HorizontalOptions="Start">
 
+                <Label Text="NAUCZYCIEL" Style="{StaticResource SectionLabel}" />
+                <Label Text="Imię i nazwisko nauczyciela będzie dopisywane do każdego skanu."
+                       FontSize="13" TextColor="#99727F8C" />
+                <Border Style="{StaticResource FieldFrame}">
+                    <Entry x:Name="TeacherNameEntry"
+                           Placeholder="Np. M. Javappen"
+                           Style="{StaticResource FieldEntry}" Margin="17,0" />
+                </Border>
+                <Label x:Name="SavedHint" Text="Zapisano." FontSize="12.5"
+                       TextColor="{StaticResource SuccessBorder}" IsVisible="False" />
+                <Button Text="Zapisz"
+                        Style="{StaticResource PrimaryButton}"
+                        HorizontalOptions="Start"
+                        Clicked="OnSaveTeacherClicked" />
+
+            </VerticalStackLayout>
         </Grid>
     </Grid>
 </ContentPage>
