@@ -10,7 +10,7 @@
 
         <controls:SidebarView Grid.Column="0" ActiveRoute="Settings" />
 
-        <Grid Grid.Column="1" RowDefinitions="Auto,*" Padding="34,30,34,20" RowSpacing="16">
+        <Grid Grid.Column="1" RowDefinitions="Auto,*, *" Padding="34,30,34,20" RowSpacing="16">
 
             <VerticalStackLayout Grid.Row="0" Spacing="4">
                 <Label Text="Ustawienia" Style="{StaticResource PageTitle}" />
@@ -61,6 +61,10 @@
                 <Label x:Name="ClearHint" Text="" FontSize="12.5"
                        TextColor="{StaticResource SuccessBorder}" IsVisible="False" />
 
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Row="2" HorizontalOptions="End" VerticalOptions="End">
+                <Label Text="Copyright © 2026 Szymon Przeklasa, Filip Kubiś" FontSize="12" TextColor="#99727F8C"/>
             </VerticalStackLayout>
         </Grid>
     </Grid>
