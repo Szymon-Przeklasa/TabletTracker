@@ -5,6 +5,10 @@ namespace TabletTracker.Pages;
 
 public partial class SettingsPage : ContentPage
 {
+    private static readonly Color SuccessColor = Color.FromArgb("#2E9E6D");
+    private static readonly Color NeutralColor = Color.FromArgb("#727F8C");
+    private static readonly Color ErrorColor = Color.FromArgb("#B3261E");
+
     private readonly DataStore _store = DataStore.Instance;
 
     public SettingsPage()
@@ -36,12 +40,12 @@ public partial class SettingsPage : ContentPage
         {
             _store.Save();
             DocsHint.Text = "Zapisano do Dokumentów.";
-            DocsHint.TextColor = Color.FromArgb("#D0BD4F");
+            DocsHint.TextColor = SuccessColor;
         }
         else
         {
             DocsHint.Text = "Zapis do Dokumentów jest dostępny na urządzeniach Android.";
-            DocsHint.TextColor = Color.FromArgb("#727F8C");
+            DocsHint.TextColor = NeutralColor;
         }
         DocsHint.IsVisible = true;
     }
@@ -73,13 +77,13 @@ public partial class SettingsPage : ContentPage
 
             var ok = _store.ImportData(json);
             ImportHint.Text = ok ? "Dane zostały zaimportowane." : "Nie udało się odczytać pliku.";
-            ImportHint.TextColor = ok ? Color.FromArgb("#D0BD4F") : Color.FromArgb("#B3261E");
+            ImportHint.TextColor = ok ? SuccessColor : ErrorColor;
             ImportHint.IsVisible = true;
         }
         catch
         {
             ImportHint.Text = "Nie udało się odczytać pliku.";
-            ImportHint.TextColor = Color.FromArgb("#B3261E");
+            ImportHint.TextColor = ErrorColor;
             ImportHint.IsVisible = true;
         }
     }
@@ -97,7 +101,7 @@ public partial class SettingsPage : ContentPage
 
         _store.ResetData();
         ClearHint.Text = "Dane zostały wyczyszczone.";
-        ClearHint.TextColor = Color.FromArgb("#D0BD4F");
+        ClearHint.TextColor = SuccessColor;
         ClearHint.IsVisible = true;
     }
 

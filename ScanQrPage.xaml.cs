@@ -83,7 +83,9 @@ public partial class ScanQrPage : ContentPage
 
             _navigating = true;
             CameraBarcodeReader.IsDetecting = false;
-            await Shell.Current.GoToAsync($"AssignStation?code={Uri.EscapeDataString(result.Value)}");
+            AssignmentFlow.StationCode = null;
+            AssignmentFlow.TabletId = result.Value;
+            await Shell.Current.GoToAsync("//AssignStation");
             _navigating = false;
         });
     }

@@ -56,15 +56,16 @@
             </VerticalStackLayout>
 
             <!-- UCZEŃ -->
-            <Grid Grid.Row="3" RowDefinitions="Auto,*" RowSpacing="8">
+            <Grid Grid.Row="3" x:Name="StudentsArea" RowDefinitions="Auto,*" RowSpacing="8">
                 <Label Grid.Row="0" Text="UCZEŃ" Style="{StaticResource SectionLabel}" />
                 <CollectionView Grid.Row="1" x:Name="StudentsList"
                                 SelectionMode="Single"
+                                SizeChanged="OnStudentsListSizeChanged"
                                 SelectionChanged="OnStudentSelected">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid Padding="14,10" ColumnDefinitions="34,12,*,Auto" ColumnSpacing="0">
-                                <BoxView Grid.ColumnSpan="4" HeightRequest="1"
+                                <BoxView Grid.ColumnSpan="4" HeightRequest="1" Margin="0,-10,0,0"
                                          Color="{StaticResource BorderHairline}"
                                          VerticalOptions="Start" />
                                 <Border Grid.Column="0" WidthRequest="34" HeightRequest="34"

@@ -5,7 +5,7 @@ using TabletTracker.Services;
 
 namespace TabletTracker.Pages;
 
-public partial class AssignStationPage : ContentPage, IQueryAttributable
+public partial class AssignStationPage : ContentPage
 {
     private readonly DataStore _store = DataStore.Instance;
 
@@ -21,20 +21,17 @@ public partial class AssignStationPage : ContentPage, IQueryAttributable
         BindingContext = this;
     }
 
-    public void ApplyQueryAttributes(IDictionary<string, object> query)
-    {
-        if (query.TryGetValue("code", out var value) && value is string code && !string.IsNullOrWhiteSpace(code))
-        {
-            _tabletId = DataStore.NormalizeCode(code);
-            TabletIdLabel.Text = DisplayTabletId(_tabletId);
-        }
-    }
-
     protected override void OnAppearing()
     {
         base.OnAppearing();
+        _tabletId = DataStore.NormalizeCode(AssignmentFlow.TabletId);
+        TabletIdLabel.Text = DataFormat.Tablet(_tabletId);
         RefreshAll();
-        Dispatcher.Dispatch(RefreshGridHeight);
+        Dispatcher.Dispatch(() =>
+        {
+            StationsGrid.SelectedItem = null;
+            RefreshGridHeight();
+        });
     }
 
     protected override void OnSizeAllocated(double width, double height)
@@ -43,11 +40,15 @@ public partial class AssignStationPage : ContentPage, IQueryAttributable
         RefreshGridHeight();
     }
 
+    private void OnStationsGridSizeChanged(object? sender, EventArgs e) => RefreshGridHeight();
+
     private void RefreshGridHeight()
     {
-        if (StationsGrid is null || Height <= 0 || StationsGrid.Y <= 0)
+        if (StationsGrid is null || GridArea is null || GridArea.Height <= 0)
             return;
-        StationsGrid.HeightRequest = Math.Max(120, Height - StationsGrid.Y - 20);
+        var target = Math.Max(120, GridArea.Height);
+        if (Math.Abs(StationsGrid.HeightRequest - target) > 1)
+            StationsGrid.HeightRequest = target;
     }
 
     private void RefreshAll()
@@ -91,14 +92,34 @@ public partial class AssignStationPage : ContentPage, IQueryAttributable
             return;
 
         _navigating = true;
-        StationsGrid.SelectedItem = null;
-        await Shell.Current.GoToAsync(
-            $"AssignClass?code={Uri.EscapeDataString(_tabletId)}&station={Uri.EscapeDataString(selected.Code)}");
+        try
+        {
+            AssignmentFlow.StationCode = selected.Code;
+            await Shell.Current.GoToAsync("//AssignClass");
+        }
+        catch
+        {
+            // ignore
+        }
         _navigating = false;
     }
 
     private async void OnCancelClicked(object sender, EventArgs e)
-        => await Shell.Current.GoToAsync("//Scan");
+    {
+        if (_navigating)
+            return;
+
+        _navigating = true;
+        try
+        {
+            await Shell.Current.GoToAsync("//Scan"); // wróć do skanowania, czyść stos przypisania
+        }
+        catch
+        {
+            // ignore
+        }
+        _navigating = false;
+    }
 
     private void SetFilter(string filter, Button active, Button other1, Button other2)
     {
@@ -118,6 +139,4 @@ public partial class AssignStationPage : ContentPage, IQueryAttributable
 
     private void OnFilterFreeClicked(object sender, EventArgs e)
         => SetFilter("Free", FilterFreeButton, FilterAllButton, FilterAssignedButton);
-
-    private static string DisplayTabletId(string id) => id.All(char.IsDigit) ? $"TABLET {id}" : id;
 }

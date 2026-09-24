@@ -6,7 +6,7 @@ public class StationItem : INotifyPropertyChanged
 {
     public string Code { get; }
 
-    public string DisplayCode => Code.All(char.IsDigit) ? $"STAN. {Code}" : Code;
+    public string DisplayCode => DataFormat.Station(Code);
 
     private string _tabletInfo = "";
     public string TabletInfo

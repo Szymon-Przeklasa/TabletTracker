@@ -98,7 +98,7 @@ public partial class ScanHistoryPage : ContentPage
             Entries.Add(new HistoryEntry(
                 scan.Timestamp.ToString("dd.MM"),
                 scan.Timestamp.ToString("HH:mm"),
-                DisplayStationCode(scan.StationCode),
+                DataFormat.Station(scan.StationCode),
                 string.IsNullOrWhiteSpace(scan.TabletId) ? "—" : scan.TabletId,
                 scan.StudentName,
                 scan.ClassName,
@@ -109,8 +109,6 @@ public partial class ScanHistoryPage : ContentPage
             ? "1 zarejestrowany skan"
             : $"{ordered.Count} zarejestrowanych skanów";
     }
-
-    private static string DisplayStationCode(string code) => code.All(char.IsDigit) ? $"STAN. {code}" : code;
 
     private void OnDateFilterChanged(object sender, EventArgs e) => ApplyFilters();
     private void OnClassFilterChanged(object sender, EventArgs e) => ApplyFilters();

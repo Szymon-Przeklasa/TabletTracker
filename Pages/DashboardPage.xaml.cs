@@ -48,12 +48,10 @@ public partial class DashboardPage : ContentPage
         {
             RecentScans.Add(new RecentScan(
                 scan.Timestamp.ToString("HH:mm"),
-                DisplayStationCode(scan.StationCode),
+                DataFormat.Station(scan.StationCode),
                 $"{scan.StudentName} — {scan.ClassName}"));
         }
     }
-
-    private static string DisplayStationCode(string code) => code.All(char.IsDigit) ? $"STAN. {code}" : code;
 
     private async void OnScanTileTapped(object sender, EventArgs e) => await Shell.Current.GoToAsync("//Scan");
     private async void OnClassesTileTapped(object sender, EventArgs e) => await Shell.Current.GoToAsync("//Classes");

@@ -60,7 +60,7 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="14,12" ColumnDefinitions="34,12,*,Auto" ColumnSpacing="0">
-                            <BoxView Grid.ColumnSpan="4" HeightRequest="1"
+                            <BoxView Grid.ColumnSpan="4" HeightRequest="1" Margin="0,-12,0,0"
                                      Color="{StaticResource BorderHairline}" VerticalOptions="Start" />
 
                             <Border Grid.Column="0" WidthRequest="34" HeightRequest="34"

@@ -32,11 +32,15 @@ public partial class StationsPage : ContentPage
         RefreshGridHeight();
     }
 
+    private void OnStationsGridSizeChanged(object? sender, EventArgs e) => RefreshGridHeight();
+
     private void RefreshGridHeight()
     {
-        if (StationsGrid is null || Height <= 0 || StationsGrid.Y <= 0)
+        if (StationsGrid is null || GridArea is null || GridArea.Height <= 0)
             return;
-        StationsGrid.HeightRequest = Math.Max(120, Height - StationsGrid.Y - 20);
+        var target = Math.Max(120, GridArea.Height);
+        if (Math.Abs(StationsGrid.HeightRequest - target) > 1)
+            StationsGrid.HeightRequest = target;
     }
 
     private void RefreshAll()

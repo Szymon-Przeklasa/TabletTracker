@@ -15,6 +15,14 @@
                   ContentTemplate="{DataTemplate pages:ScanQrPage}"
                   Shell.NavBarIsVisible="False" Shell.TabBarIsVisible="False" />
 
+    <ShellContent Title="Wybierz stanowisko" Route="AssignStation"
+                  ContentTemplate="{DataTemplate pages:AssignStationPage}"
+                  Shell.NavBarIsVisible="False" Shell.TabBarIsVisible="False" />
+
+    <ShellContent Title="Przypisz klasę i ucznia" Route="AssignClass"
+                  ContentTemplate="{DataTemplate pages:AssignClassPage}"
+                  Shell.NavBarIsVisible="False" Shell.TabBarIsVisible="False" />
+
     <ShellContent Title="Zarządzaj klasami" Route="Classes"
                   ContentTemplate="{DataTemplate pages:ManageClassesPage}"
                   Shell.NavBarIsVisible="False" Shell.TabBarIsVisible="False" />

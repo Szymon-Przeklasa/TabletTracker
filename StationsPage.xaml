@@ -18,7 +18,7 @@
                 <Label x:Name="SubtitleLabel" Text="Sala P1" Style="{StaticResource PageSubtitle}" />
             </VerticalStackLayout>
 
-<!-- Pasek statystyk -->
+            <!-- Pasek statystyk -->
             <Border Grid.Row="1" BackgroundColor="{StaticResource CardMuted}"
                     Stroke="{StaticResource BorderHairline}" StrokeThickness="1"
                     Padding="19,15">
@@ -72,38 +72,41 @@
             </HorizontalStackLayout>
 
             <!-- Siatka stanowisk -->
-            <CollectionView Grid.Row="4" x:Name="StationsGrid"
-                            ItemsSource="{Binding Stations}"
-                            SelectionMode="Single"
-                            SelectionChanged="OnStationSelectionChanged">
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical" Span="5"
-                                     HorizontalItemSpacing="10" VerticalItemSpacing="10" />
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border StrokeThickness="1" Padding="12" HeightRequest="142"
-                                BackgroundColor="{Binding IsAssigned, Converter={StaticResource StationBgConverter}}"
-                                Stroke="{Binding IsAssigned, Converter={StaticResource StationBorderConverter}}">
-                            <Grid RowDefinitions="Auto,Auto,*">
-                                <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
-                                    <Label Grid.Column="0" Text="{Binding DisplayCode}"
-                                           FontSize="15" FontAttributes="Bold"
-                                           TextColor="{StaticResource TextPrimary}" />
-                                    <Ellipse Grid.Column="1" WidthRequest="8" HeightRequest="8"
-                                             VerticalOptions="Center"
-                                             Fill="{Binding IsAssigned, Converter={StaticResource StationDotConverter}}" />
+            <Grid Grid.Row="4" x:Name="GridArea">
+                <CollectionView x:Name="StationsGrid"
+                                ItemsSource="{Binding Stations}"
+                                SelectionMode="Single"
+                                SizeChanged="OnStationsGridSizeChanged"
+                                SelectionChanged="OnStationSelectionChanged">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="5"
+                                         HorizontalItemSpacing="10" VerticalItemSpacing="10" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border StrokeThickness="1" Padding="12" HeightRequest="142"
+                                    BackgroundColor="{Binding IsAssigned, Converter={StaticResource StationBgConverter}}"
+                                    Stroke="{Binding IsAssigned, Converter={StaticResource StationBorderConverter}}">
+                                <Grid RowDefinitions="Auto,Auto,*">
+                                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                                        <Label Grid.Column="0" Text="{Binding DisplayCode}"
+                                               FontSize="15" FontAttributes="Bold"
+                                               TextColor="{StaticResource TextPrimary}" />
+                                        <Ellipse Grid.Column="1" WidthRequest="8" HeightRequest="8"
+                                                 VerticalOptions="Center"
+                                                 Fill="{Binding IsAssigned, Converter={StaticResource StationDotConverter}}" />
+                                    </Grid>
+                                    <Label Grid.Row="1" Text="{Binding TabletInfo}"
+                                           FontSize="10.5" TextColor="#727F8C" Margin="0,4,0,0" />
+                                    <Label Grid.Row="2" Text="{Binding StudentInfo}" FontSize="12"
+                                           VerticalOptions="End" TextColor="{StaticResource TextPrimary}"
+                                           FontAttributes="{Binding IsAssigned, Converter={StaticResource StationFontConverter}}" />
                                 </Grid>
-                                <Label Grid.Row="1" Text="{Binding TabletInfo}"
-                                       FontSize="10.5" TextColor="#727F8C" Margin="0,4,0,0" />
-                                <Label Grid.Row="2" Text="{Binding StudentInfo}" FontSize="12"
-                                       VerticalOptions="End" TextColor="{StaticResource TextPrimary}"
-                                       FontAttributes="{Binding IsAssigned, Converter={StaticResource StationFontConverter}}" />
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
 
         </Grid>
     </Grid>
