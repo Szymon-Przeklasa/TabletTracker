@@ -13,7 +13,7 @@ public sealed class DataStore
     private readonly string _filePath;
     private readonly object _saveLock = new();
 
-    public AppData Data { get; }
+    public AppData Data { get; private set; }
 
     private DataStore()
     {
@@ -27,6 +27,7 @@ public sealed class DataStore
         {
             var json = JsonSerializer.Serialize(Data, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(_filePath, json);
+            DocumentsService.WriteToDocuments(json);
         }
     }
 
@@ -53,6 +54,41 @@ public sealed class DataStore
             data.Stations.Add(new Station { Code = i.ToString("00") });
         Save();
         return data;
+    }
+
+    public bool ImportData(string json)
+    {
+        try
+        {
+            var imported = JsonSerializer.Deserialize<AppData>(json);
+            if (imported is null)
+                return false;
+
+            imported.Stations ??= new List<Station>();
+            imported.Classes ??= new List<StudentClass>();
+            imported.Scans ??= new List<ScanRecord>();
+            imported.Settings ??= new AppSettings();
+
+            foreach (var cls in imported.Classes)
+                cls.Students ??= new List<Student>();
+
+            Data = imported;
+            Save();
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public void ResetData()
+    {
+        var data = new AppData();
+        for (var i = 1; i <= 17; i++)
+            data.Stations.Add(new Station { Code = i.ToString("00") });
+        Data = data;
+        Save();
     }
 
     public Station? FindStation(string code)

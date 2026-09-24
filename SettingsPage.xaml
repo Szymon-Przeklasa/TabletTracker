@@ -34,6 +34,33 @@
                         HorizontalOptions="Start"
                         Clicked="OnSaveTeacherClicked" />
 
+                <BoxView HeightRequest="1" Color="{StaticResource BorderHairline}" Margin="0,8,0,6" />
+
+                <Label Text="DANE" Style="{StaticResource SectionLabel}" />
+                <Label Text="Zarządzanie plikiem danych aplikacji."
+                       FontSize="13" TextColor="#99727F8C" />
+
+                <Button Text="Zapisz dane do Dokumentów"
+                        Style="{StaticResource OutlineButton}"
+                        HorizontalOptions="Start"
+                        Clicked="OnSaveToDocumentsClicked" />
+                <Label x:Name="DocsHint" Text="" FontSize="12.5"
+                       TextColor="{StaticResource SuccessBorder}" IsVisible="False" />
+
+                <Button Text="Importuj dane z pliku (.json)"
+                        Style="{StaticResource OutlineButton}"
+                        HorizontalOptions="Start"
+                        Clicked="OnImportClicked" />
+                <Label x:Name="ImportHint" Text="" FontSize="12.5"
+                       TextColor="{StaticResource SuccessBorder}" IsVisible="False" />
+
+                <Button Text="Wyczyść wszystkie dane"
+                        Style="{StaticResource OutlineButton}"
+                        HorizontalOptions="Start"
+                        Clicked="OnClearDataClicked" />
+                <Label x:Name="ClearHint" Text="" FontSize="12.5"
+                       TextColor="{StaticResource SuccessBorder}" IsVisible="False" />
+
             </VerticalStackLayout>
         </Grid>
     </Grid>

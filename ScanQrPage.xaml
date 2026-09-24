@@ -23,7 +23,7 @@
                 <!-- Podgląd kamery z ramką skanera -->
                 <Grid x:Name="ScannerArea"
                       VerticalOptions="Center" HorizontalOptions="Center"
-                      WidthRequest="360" HeightRequest="360">
+                      WidthRequest="430" HeightRequest="430">
 
                     <zxing:CameraBarcodeReaderView
                         x:Name="CameraBarcodeReader"
@@ -34,27 +34,27 @@
                     <!-- Ramka i podpisy (nakładka, ignoruje dotyk) -->
                     <Grid InputTransparent="True">
                         <Ellipse Stroke="{StaticResource Accent}" StrokeThickness="1" Opacity="0.45"
-                                 WidthRequest="119" HeightRequest="119"
+                                 WidthRequest="132" HeightRequest="132"
                                  HorizontalOptions="Center" VerticalOptions="Center" />
 
-                        <BoxView Color="{StaticResource Accent}" WidthRequest="34" HeightRequest="2"
+                        <BoxView Color="{StaticResource Accent}" WidthRequest="40" HeightRequest="2"
                                  HorizontalOptions="Start" VerticalOptions="Start" Margin="16" />
-                        <BoxView Color="{StaticResource Accent}" WidthRequest="2" HeightRequest="34"
+                        <BoxView Color="{StaticResource Accent}" WidthRequest="2" HeightRequest="40"
                                  HorizontalOptions="Start" VerticalOptions="Start" Margin="16" />
 
-                        <BoxView Color="{StaticResource Accent}" WidthRequest="34" HeightRequest="2"
+                        <BoxView Color="{StaticResource Accent}" WidthRequest="40" HeightRequest="2"
                                  HorizontalOptions="End" VerticalOptions="Start" Margin="16" />
-                        <BoxView Color="{StaticResource Accent}" WidthRequest="2" HeightRequest="34"
+                        <BoxView Color="{StaticResource Accent}" WidthRequest="2" HeightRequest="40"
                                  HorizontalOptions="End" VerticalOptions="Start" Margin="16" />
 
-                        <BoxView Color="{StaticResource Accent}" WidthRequest="34" HeightRequest="2"
+                        <BoxView Color="{StaticResource Accent}" WidthRequest="40" HeightRequest="2"
                                  HorizontalOptions="Start" VerticalOptions="End" Margin="16" />
-                        <BoxView Color="{StaticResource Accent}" WidthRequest="2" HeightRequest="34"
+                        <BoxView Color="{StaticResource Accent}" WidthRequest="2" HeightRequest="40"
                                  HorizontalOptions="Start" VerticalOptions="End" Margin="16" />
 
-                        <BoxView Color="{StaticResource Accent}" WidthRequest="34" HeightRequest="2"
+                        <BoxView Color="{StaticResource Accent}" WidthRequest="40" HeightRequest="2"
                                  HorizontalOptions="End" VerticalOptions="End" Margin="16" />
-                        <BoxView Color="{StaticResource Accent}" WidthRequest="2" HeightRequest="34"
+                        <BoxView Color="{StaticResource Accent}" WidthRequest="2" HeightRequest="40"
                                  HorizontalOptions="End" VerticalOptions="End" Margin="16" />
 
                         <VerticalStackLayout VerticalOptions="End" HorizontalOptions="Center" Margin="0,0,0,24" Spacing="4">
