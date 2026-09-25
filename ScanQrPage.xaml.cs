@@ -27,24 +27,14 @@ public partial class ScanQrPage : ContentPage
             ShowUnsupported("Skanowanie kodów QR wymaga urządzenia z kamerą.");
     }
 
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
 
         if (!IsScannerSupported)
             return;
 
-        var granted = await TryRequestCameraPermissionAsync();
-        if (granted)
-        {
-            CameraBarcodeReader.IsVisible = true;
-            UnsupportedPanel.IsVisible = false;
-            CameraBarcodeReader.IsDetecting = true;
-        }
-        else
-        {
-            ShowUnsupported("Brak dostępu do kamery.");
-        }
+        RefreshScannerState();
     }
 
     protected override void OnDisappearing()
@@ -55,14 +45,39 @@ public partial class ScanQrPage : ContentPage
             CameraBarcodeReader.IsDetecting = false;
     }
 
-    private async Task<bool> TryRequestCameraPermissionAsync()
+    // Uprawnienie pytamy na starcie aplikacji — tutaj tylko sprawdzamy jego stan.
+    private async void RefreshScannerState()
+    {
+        if (await IsCameraGrantedAsync())
+        {
+            CameraBarcodeReader.IsVisible = true;
+            UnsupportedPanel.IsVisible = false;
+            EnableScanning();
+        }
+        else
+        {
+            ShowUnsupported("Brak dostępu do kamery.");
+        }
+    }
+
+    // Aparat uruchamia się dopiero, gdy handler kontrolki jest dołączony.
+    // Przy pierwszym uruchomieniu handler może jeszcze nie istnieć
+    // — ponawiamy aż będzie gotowy.
+    private void EnableScanning()
+    {
+        if (CameraBarcodeReader.Handler is not null)
+        {
+            CameraBarcodeReader.IsDetecting = true;
+            return;
+        }
+        Dispatcher.DispatchDelayed(TimeSpan.FromMilliseconds(300), EnableScanning);
+    }
+
+    private static async Task<bool> IsCameraGrantedAsync()
     {
         try
         {
-            var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
-            if (status != PermissionStatus.Granted)
-                status = await Permissions.RequestAsync<Permissions.Camera>();
-            return status == PermissionStatus.Granted;
+            return await Permissions.CheckStatusAsync<Permissions.Camera>() == PermissionStatus.Granted;
         }
         catch
         {

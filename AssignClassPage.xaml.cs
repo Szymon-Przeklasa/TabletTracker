@@ -153,6 +153,7 @@ public partial class AssignClassPage : ContentPage
         _store.Save();
 
         AssignmentFlow.Reset();
+        _busy = false;
 
         // Wróć do skanowania (nawigacja absolutna czyści stos przypisania)
         try
@@ -161,7 +162,7 @@ public partial class AssignClassPage : ContentPage
         }
         catch
         {
-            _busy = false;
+            // ignore
         }
     }
 
