@@ -21,6 +21,28 @@ public partial class SettingsPage : ContentPage
         base.OnAppearing();
         TeacherNameEntry.Text = _store.Data.Settings.TeacherName;
         SavedHint.IsVisible = false;
+        RebuildHistoryRangeOptions();
+    }
+
+    // Rok szkolny w Polsce zaczyna się 1 września.
+    private static int SchoolYearOf(DateTime date)
+        => date.Month >= 9 ? date.Year : date.Year - 1;
+
+    private static string SchoolYearLabel(int year) => $"Rok szkolny {year}/{year + 1}";
+
+    private void RebuildHistoryRangeOptions()
+    {
+        var years = _store.Data.Scans
+            .Select(s => SchoolYearOf(s.Timestamp))
+            .Distinct()
+            .OrderByDescending(y => y)
+            .Select(y => new HistoryRangeOption(SchoolYearLabel(y), y))
+            .ToList();
+
+        var options = new List<HistoryRangeOption> { new("Cała historia", null) }.Concat(years).ToList();
+        HistoryRangePicker.ItemsSource = options;
+        HistoryRangePicker.ItemDisplayBinding = new Binding(nameof(HistoryRangeOption.Label));
+        HistoryRangePicker.SelectedIndex = options.Count > 0 ? 0 : -1;
     }
 
     private void OnSaveTeacherClicked(object sender, EventArgs e)
@@ -105,10 +127,54 @@ public partial class SettingsPage : ContentPage
         ClearHint.IsVisible = true;
     }
 
+    private async void OnDeleteHistoryRangeClicked(object sender, EventArgs e)
+    {
+        HideHints();
+        SavedHint.IsVisible = false;
+
+        var option = HistoryRangePicker.SelectedItem as HistoryRangeOption;
+        if (option is null)
+            return;
+
+        var toDelete = _store.Data.Scans
+            .Where(s => option.SchoolYear is null || SchoolYearOf(s.Timestamp) == option.SchoolYear)
+            .ToList();
+
+        if (toDelete.Count == 0)
+        {
+            HistoryHint.Text = "Brak skanów w wybranym okresie.";
+            HistoryHint.TextColor = NeutralColor;
+            HistoryHint.IsVisible = true;
+            return;
+        }
+
+        var rangeLabel = option.SchoolYear is null
+            ? "całej historii"
+            : SchoolYearLabel(option.SchoolYear.Value).ToLowerInvariant();
+
+        var confirm = await DisplayAlert("Usunąć historię?",
+            $"Usunąć {toDelete.Count} skanów z {rangeLabel}? Operacji nie można cofnąć.",
+            "Usuń", "Anuluj");
+        if (!confirm)
+            return;
+
+        foreach (var scan in toDelete)
+            _store.Data.Scans.Remove(scan);
+        _store.Save();
+
+        HistoryHint.Text = $"Usunięto {toDelete.Count} skanów.";
+        HistoryHint.TextColor = SuccessColor;
+        HistoryHint.IsVisible = true;
+        RebuildHistoryRangeOptions();
+    }
+
     private void HideHints()
     {
         DocsHint.IsVisible = false;
         ImportHint.IsVisible = false;
         ClearHint.IsVisible = false;
+        HistoryHint.IsVisible = false;
     }
+
+    private sealed record HistoryRangeOption(string Label, int? SchoolYear);
 }

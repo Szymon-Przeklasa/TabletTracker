@@ -61,6 +61,23 @@
                 <Label x:Name="ClearHint" Text="" FontSize="12.5"
                        TextColor="{StaticResource SuccessBorder}" IsVisible="False" />
 
+                <BoxView HeightRequest="1" Color="{StaticResource BorderHairline}" Margin="0,8,0,6" />
+
+                <Label Text="HISTORIA" Style="{StaticResource SectionLabel}" />
+                <Label Text="Usuwanie zapisanych skanów z wybranego roku szkolnego (od 1 września)."
+                       FontSize="13" TextColor="#99727F8C" />
+                <Border Style="{StaticResource FieldFrame}">
+                    <Picker x:Name="HistoryRangePicker" Title="Okres: wszystkie"
+                            FontSize="14" TextColor="{StaticResource TextPrimary}"
+                            Margin="15,0" />
+                </Border>
+                <Button Text="Usuń historię z wybranego okresu"
+                        Style="{StaticResource OutlineButton}"
+                        HorizontalOptions="Start"
+                        Clicked="OnDeleteHistoryRangeClicked" />
+                <Label x:Name="HistoryHint" Text="" FontSize="12.5"
+                       TextColor="{StaticResource SuccessBorder}" IsVisible="False" />
+
             </VerticalStackLayout>
 
             <VerticalStackLayout Grid.Row="2" HorizontalOptions="End" VerticalOptions="End">
