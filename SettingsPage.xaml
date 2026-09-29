@@ -10,14 +10,15 @@
 
         <controls:SidebarView Grid.Column="0" ActiveRoute="Settings" />
 
-        <Grid Grid.Column="1" RowDefinitions="Auto,*, *" Padding="34,30,34,20" RowSpacing="16">
+        <Grid Grid.Column="1" RowDefinitions="Auto,*,Auto" Padding="34,30,34,20" RowSpacing="16">
 
             <VerticalStackLayout Grid.Row="0" Spacing="4">
                 <Label Text="Ustawienia" Style="{StaticResource PageTitle}" />
                 <Label Text="Konfiguracja aplikacji" Style="{StaticResource PageSubtitle}" />
             </VerticalStackLayout>
 
-            <VerticalStackLayout Grid.Row="1" Spacing="12" MaximumWidthRequest="460" HorizontalOptions="Start">
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Spacing="12" MaximumWidthRequest="460" HorizontalOptions="Start">
 
                 <Label Text="NAUCZYCIEL" Style="{StaticResource SectionLabel}" />
                 <Label Text="Imię i nazwisko nauczyciela będzie dopisywane do każdego skanu."
@@ -78,7 +79,8 @@
                 <Label x:Name="HistoryHint" Text="" FontSize="12.5"
                        TextColor="{StaticResource SuccessBorder}" IsVisible="False" />
 
-            </VerticalStackLayout>
+                </VerticalStackLayout>
+            </ScrollView>
 
             <VerticalStackLayout Grid.Row="2" HorizontalOptions="End" VerticalOptions="End">
                 <Label Text="Copyright © 2026 Szymon Przeklasa, Filip Kubiś" FontSize="12" TextColor="#99727F8C"/>
